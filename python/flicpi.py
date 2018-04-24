@@ -5,7 +5,7 @@
 # This program attempts to connect to all previously verified Flic buttons by this server.
 # Once connected, it prints Down and Up when a button is pressed or released.
 # It also monitors when new buttons are verified and connects to them as well. For example, run this program and at the same time the scan_wizard.py program.
-
+from datetime import datetime
 import fliclib
 import sqlite3
 
