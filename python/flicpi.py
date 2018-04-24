@@ -17,7 +17,7 @@ def got_button(bd_addr):
 	cc.on_button_single_or_double_click_or_hold = \
 		lambda channel, click_type, was_queued, time_diff: \
 			print(channel.bd_addr + " " + str(click_type))
-
+			print(click_type)
 
 	cc.on_connection_status_changed = \
 		lambda channel, connection_status, disconnect_reason: \
