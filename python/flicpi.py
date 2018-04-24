@@ -30,7 +30,7 @@ def got_info(items):
 
 def handle_click_type(bdAddr, click_type):
 
-	if click_type is ClickType.ButtonSingleClick:
+	if click_type is fliclib.ClickType.ButtonSingleClick:
 		handle_single_click(bdAddr)
 
 def handle_single_click(bdAddr):
