@@ -29,8 +29,12 @@ def got_info(items):
 		got_button(bd_addr)
 
 def handle_click_type(bdAddr, click_type):
-	print(type(bdAddr), bdAddr)
-	print(type(click_type), click_type, str(click_type))
+
+	if click_type is ClickType.ButtonSingleClick:
+		handle_single_click(bdAddr)
+
+def handle_single_click(bdAddr):
+	print(bdAddr)
 
 client.get_info(got_info)
 
