@@ -10,4 +10,11 @@ bdAddr = ("80:80:80:80",)
 for row in db.execute("SELECT * FROM event_log WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", bdAddr):
 	print("row:", row)
 
+cur = db.execute("SELECT * FROM event_log WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", bdAddr)
+print(cur.fetchone())
+
+if None:
+	return False
+
+
 print("[get_status]:")

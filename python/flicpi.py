@@ -39,14 +39,16 @@ def handle_click_type(bdAddr, click_type):
 def handle_single_click(bdAddr):
 	
 	print("[handle_single_click]")
-	get_status(bdAddr)
+	is_disturbed(bdAddr)
 
-def get_status(bdAddr):
+def is_disturbed(bdAddr):
 
-	for row in db.execute("SELECT * FROM event_log WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", (bdAddr, ))
-		print("[get_status]:", row)
+	row = db.execute("SELECT * FROM event_log WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", (bdAddr, )).fetchone()
+
+	if row is None:
+		return False
 	
-	pass
+	return False
 
 
 client.get_info(got_info)
