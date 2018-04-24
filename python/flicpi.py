@@ -6,6 +6,7 @@
 # Once connected, it prints Down and Up when a button is pressed or released.
 # It also monitors when new buttons are verified and connects to them as well. For example, run this program and at the same time the scan_wizard.py program.
 from datetime import datetime
+import dateutil
 import fliclib
 import sqlite3
 
@@ -36,6 +37,7 @@ def handle_click_type(bdAddr, click_type):
 	if click_type is fliclib.ClickType.ButtonSingleClick:
 		handle_single_click(bdAddr)
 
+
 def handle_single_click(bdAddr):
 	
 	timestamp, disturbed = get_last(bdAddr)
@@ -43,19 +45,21 @@ def handle_single_click(bdAddr):
 	print("[handle_single_click]", timestamp, disturbed)
 
 	db.execute("INSERT INTO event_log VALUES (?, ?, ?)", (datetime.now(), bdAddr, not disturbed, ))
-	# db.execute("INSERT ")
-
+	db.commit()
+	print("[handle_single_click]: INSERT", (datetime.now(), bdAddr, not disturbed, ))
 
 
 def get_last(bdAddr):
 
 	row = db.execute("SELECT * FROM event_log WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", (bdAddr, )).fetchone()
-	print(row)
+	
 	if row is None:
 		return (datetime.now(), False)
 
-	return (datetime.now(), False)
-
+	if bool(row[2]):
+		return dateutil.parser.parse(row[0]), True
+	
+	return dateutil.parser.parse(row[0]),  False
 
 
 client.get_info(got_info)
