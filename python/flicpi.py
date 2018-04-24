@@ -38,17 +38,23 @@ def handle_click_type(bdAddr, click_type):
 
 def handle_single_click(bdAddr):
 	
-	print("[handle_single_click]")
-	is_disturbed(bdAddr)
+	timestamp, disturbed = get_last(bdAddr):
 
-def is_disturbed(bdAddr):
+	print("[handle_single_click]", timestamp, disturbed)
 
-	row = db.execute("SELECT * FROM event_log WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", (bdAddr, )).fetchone()
+	# db.execute("INSERT ")
+
+
+
+def get_last(bdAddr):
+
+	row = db.execute("SELECT * FROM event_log WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", bdAddr).fetchone()
 
 	if row is None:
-		return False
-	
-	return False
+		return (datetime.now(), False)
+
+	return (datetime.now(), False)
+
 
 
 client.get_info(got_info)

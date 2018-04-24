@@ -1,3 +1,4 @@
+from datetime import datetime
 import sqlite3
 db = sqlite3.connect('flicpi.db')
 print(db)
@@ -7,14 +8,17 @@ bdAddr = ("80:80:80:80",)
 
 # c.execute("SELECT * FROM event_log WHERE bdAddr=?", bdAddr)
 
-for row in db.execute("SELECT * FROM event_log WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", bdAddr):
-	print("row:", row)
 
-cur = db.execute("SELECT * FROM event_log WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", bdAddr)
-print(cur.fetchone())
+def get_last(bdAddr):
 
-if None:
-	return False
+	row = db.execute("SELECT * FROM event_log WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", bdAddr).fetchone()
+
+	if row is None:
+		return (datetime.now(), False)
+
+	return (datetime.now(), False)
+
+timestamp, status = get_last(bdAddr)
 
 
-print("[get_status]:")
+print("[get_status]:", timestamp, status)
