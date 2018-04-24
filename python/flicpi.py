@@ -43,9 +43,8 @@ def handle_single_click(bdAddr):
 
 def get_status(bdAddr):
 
-	row = db.execute("SELECT * FROM event_log WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", (bdAddr, )) :
+	row = db.execute("SELECT * FROM event_log WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", (bdAddr, ))
 	print("[get_status]:", row)
-
 	pass
 
 
