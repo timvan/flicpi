@@ -46,19 +46,19 @@ def handle_single_click(bdAddr):
 
 	db.execute("INSERT INTO event_log VALUES (?, ?, ?)", (datetime.now(), bdAddr, not disturbed, ))
 	db.commit()
-	print("[handle_single_click]: INSERT", (datetime.now(), bdAddr, not disturbed, ))
+	print((datetime.now(), bdAddr, not disturbed, ))
 
 
 def get_last(bdAddr):
 
 	row = db.execute("SELECT * FROM event_log WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", (bdAddr, )).fetchone()
-	
+	print(row)
 	if row is None:
 		return (datetime.now(), False)
 
 	if bool(row[2]):
 		return dateutil.parser.parse(row[0]), True
-	
+
 	return dateutil.parser.parse(row[0]),  False
 
 

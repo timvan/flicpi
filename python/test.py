@@ -2,7 +2,6 @@ from datetime import datetime
 import dateutil.parser
 import sqlite3
 db = sqlite3.connect('flicpi.db')
-print(db)
 bdAddr = "80:80:80:80"
 
 # c = db.cursor()
