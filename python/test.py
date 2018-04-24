@@ -21,4 +21,6 @@ def get_last(bdAddr):
 timestamp, status = get_last(bdAddr)
 
 
+
+
 print("[get_status]:", timestamp, status)
