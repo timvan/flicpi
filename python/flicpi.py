@@ -10,6 +10,8 @@ import fliclib
 import sqlite3
 
 client = fliclib.FlicClient("localhost")
+
+# flicpi.db .event_log: (timestamp TEXT, bdAddr TEXT, status INTEGER)
 db = sqlite3.connect('flicpi.db')
 
 def got_button(bd_addr):
@@ -28,13 +30,24 @@ def got_info(items):
 	for bd_addr in items["bd_addr_of_verified_buttons"]:
 		got_button(bd_addr)
 
+
 def handle_click_type(bdAddr, click_type):
 
 	if click_type is fliclib.ClickType.ButtonSingleClick:
 		handle_single_click(bdAddr)
 
 def handle_single_click(bdAddr):
-	print(bdAddr)
+	
+	print("[handle_single_click]")
+	get_status(bdAddr)
+
+def get_status(bdAddr):
+
+	row = db.execute("SELECT * FROM event_log WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", bdAddr)
+	print("[get_status]:", row)
+
+	pass
+
 
 client.get_info(got_info)
 
