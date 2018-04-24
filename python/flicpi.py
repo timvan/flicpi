@@ -42,7 +42,7 @@ def handle_single_click(bdAddr):
 
 	print("[handle_single_click]", timestamp, disturbed)
 
-	db.execute("INSERT INTO event_log VALUES (?, ?, ?)", (dateimte.now(), bdAddr, not disturbed, ))
+	db.execute("INSERT INTO event_log VALUES (?, ?, ?)", (datetime.now(), bdAddr, not disturbed, ))
 	# db.execute("INSERT ")
 
 
