@@ -49,7 +49,7 @@ def handle_single_click(bdAddr):
 
 def get_last(bdAddr):
 
-	row = db.execute("SELECT * FROM event_log WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", bdAddr).fetchone()
+	row = db.execute("SELECT * FROM event_log WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", (bdAddr, )).fetchone()
 	print(row)
 	if row is None:
 		return (datetime.now(), False)
