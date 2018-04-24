@@ -16,8 +16,8 @@ def got_button(bd_addr):
 	cc = fliclib.ButtonConnectionChannel(bd_addr)
 	cc.on_button_single_or_double_click_or_hold = \
 		lambda channel, click_type, was_queued, time_diff: \
-			print(channel.bd_addr + " " + str(click_type) + click_type)
-			# print(click_type)
+			# print(channel.bd_addr + " " + str(click_type))
+			handle_click_type(channel.bd_addr, click_type)
 
 	cc.on_connection_status_changed = \
 		lambda channel, connection_status, disconnect_reason: \
@@ -28,6 +28,10 @@ def got_info(items):
 	print(items)
 	for bd_addr in items["bd_addr_of_verified_buttons"]:
 		got_button(bd_addr)
+
+def handle_click_type(bdAddr, click_type):
+	print(type(bdAddr), bdAddr)
+	print(type(click_type), click_type, str(click_type))
 
 client.get_info(got_info)
 
