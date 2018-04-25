@@ -98,11 +98,8 @@ if __name__ == '__main__':
 
     client.get_info(got_info)
     client.on_new_verified_button = got_button
-    
-
-    app.debug = True
-    app.port = 5000
-    app.host = '0.0.0.0'
-    socketio.run(app)
-
     client.handle_events()
+    
+    socketio.run(app, debug = True, port = 5000, host = '0.0.0.0')
+
+    
