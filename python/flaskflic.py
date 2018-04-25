@@ -100,4 +100,7 @@ if __name__ == '__main__':
     client.on_new_verified_button = got_button
     client.handle_events()
 
+    app.debug = True
+    app.port = 5000
+    app.host = '0.0.0.0'
     socketio.run(app)
