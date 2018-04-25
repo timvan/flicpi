@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<!-- Compiled and minified CSS -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css"> -->
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+
+	<title>Flic Pi </title>
+</head>
+<body>
+
+	<div>Socket Status: <span id="socket_status">Disconnected</span></div>
+
+	<div>
+		<table>
+			<thead>
+				<tr>
+					<th>bdAddr</th>
+					<th>Status</th>
+					<th>Disruption</th>
+					<th>Total</th>
+				</tr>
+			</thead>
+			<tbody>
+				
+			</tbody>
+		</table>
+	</div>
+
+
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+<script type="text/javascript" charset="utf-8">
+    var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+    var $socket_status = $('#socket_status')
+
+    socket.on('connect', function() {
+    	$socket_status.html('Connected');
+        socket.emit('my event', {data: 'I\'m connected!'});
+    });
+
+    socket.on('disconnect', function() {
+    	$socket_status.html('Disconnected');
+    });
+
+</script>
+
+
+</body>
+</html>
