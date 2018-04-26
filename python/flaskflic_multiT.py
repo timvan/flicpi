@@ -42,7 +42,6 @@ class T(threading.Thread):
 		db = sqlite3.connect('flicpi.db')
 
 
-
 		def got_button(bd_addr):
 			cc = fliclib.ButtonConnectionChannel(bd_addr)
 			cc.on_button_single_or_double_click_or_hold = \
@@ -69,6 +68,9 @@ class T(threading.Thread):
 
 		def handle_single_click(bdAddr):
 			
+
+			socketio.emit('single click', bdAddr)
+
 			timestamp, disturbed = get_last(bdAddr)
 
 			print("[handle_single_click] get_last returned", timestamp, disturbed)

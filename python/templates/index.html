@@ -31,6 +31,8 @@
 		</table>
 	</div>
 
+	<div id="single_click"></div>
+
 
 
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
@@ -38,6 +40,7 @@
     var socket = io.connect('http://' + document.domain + ':' + location.port);
 
     var $socket_status = $('#socket_status')
+    var $single_click = $('#single_click')
 
     socket.on('connect', function() {
     	$socket_status.html('Connected');
@@ -47,6 +50,10 @@
     socket.on('disconnect', function() {
     	$socket_status.html('Disconnected');
     });
+
+    socket.on('single click', function(data) {
+    	$single_click.html('Single click pressed')
+    })
 
 </script>
 
