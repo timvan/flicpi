@@ -113,12 +113,13 @@ class T(threading.Thread):
 
 
 
+T().start()
+
 # --------------------- RUN TIME ---------------------
 
 
 if __name__ == '__main__':
 
-	T().start()
 	socketio.run(app, debug=True, host='0.0.0.0', port=5000)
 
 
