@@ -30,7 +30,10 @@ def handle_my_event(json):
 # --------------------- FLIC THREAD ---------------------
 
 class T(threading.Thread):
+
 	def run(self):
+
+		print("Running T...")
 
 		client = fliclib.FlicClient("localhost")
 
@@ -43,6 +46,7 @@ class T(threading.Thread):
 		client.on_new_verified_button = got_button
 
 		client.handle_events()
+
 
 	def got_button(bd_addr):
 		cc = fliclib.ButtonConnectionChannel(bd_addr)
@@ -109,17 +113,12 @@ class T(threading.Thread):
 
 
 
-
-
-
-
-
-
 # --------------------- RUN TIME ---------------------
 
 
 if __name__ == '__main__':
 
+	T().start()
     socketio.run(app, debug=True, host='0.0.0.0', port=5000)
 
 
