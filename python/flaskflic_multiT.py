@@ -7,7 +7,6 @@ import sqlite3
 import threading
 
 
-
 # --------------------- FLASK APP  ---------------------
 
 app = Flask(__name__)
@@ -115,8 +114,7 @@ class T(threading.Thread):
 		client.handle_events()
 
 
-
-
+T.daemon = True
 T().start()
 
 # --------------------- RUN TIME ---------------------
