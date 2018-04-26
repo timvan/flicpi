@@ -20,11 +20,6 @@ client = fliclib.FlicClient("0.0.0.0")
 db = sqlite3.connect('flicpi.db')
 
 
-client.get_info(got_info)
-client.on_new_verified_button = got_button
-client.handle_events()	
-
-
 @app.route('/')
 def index():
 	return render_template('index.html')
@@ -97,6 +92,11 @@ def get_total_disturbance(bdAddr):
 
 	total = db.execute("SELECT SUM(disturbance) FROM disturbances WHERE bdAddr=?", (bdAddr,)).fetchone()
 	return round(total[0], 0)
+
+
+client.get_info(got_info)
+client.on_new_verified_button = got_button
+client.handle_events()	
 
 
 if __name__ == '__main__':
