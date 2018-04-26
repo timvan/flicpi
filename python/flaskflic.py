@@ -8,6 +8,10 @@ import sqlite3
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
+app.debug = True
+app.port = 5000
+app.host = '0.0.0.0'
+
 socketio = SocketIO(app)
 
 client = fliclib.FlicClient("0.0.0.0")
@@ -15,6 +19,10 @@ client = fliclib.FlicClient("0.0.0.0")
 # flicpi.db .disturbances: (timestamp TEXT, bdADdr TEXT, disturbance INTEGER)
 db = sqlite3.connect('flicpi.db')
 
+
+client.get_info(got_info)
+client.on_new_verified_button = got_button
+client.handle_events()	
 
 
 @app.route('/')
@@ -92,15 +100,6 @@ def get_total_disturbance(bdAddr):
 
 
 if __name__ == '__main__':
-
-
-    client.get_info(got_info)
-    client.on_new_verified_button = got_button
-    client.handle_events()
-
-    app.debug = True
-    app.port = 5000
-    app.host = '0.0.0.0'
 
     socketio.run(app, debug = True, port = 5000, host = '0.0.0.0')
 
