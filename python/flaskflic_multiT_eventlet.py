@@ -47,7 +47,7 @@ def connect_new_button():
 
 
 def init_devices():	
-	rows = db_flicdeamon.execute("SELECT bdaddr, color FROM users").fetchall()
+	rows = db_flicdeamon.execute("SELECT bdaddr, color FROM buttons").fetchall()
 	for i, row in enumerate(rows):
 		DEVICES.append(Device(bdAddr = row['0'], user = i, colour = row['1']))
 
