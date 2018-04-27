@@ -12,8 +12,8 @@ from threading import Lock
 import eventlet
 eventlet.monkey_patch()
 
-
-devices = []
+global DEVICES
+DEVICES = []
 
 class Device():
 	def __init__(self, bdAddr, user, colour):
@@ -49,7 +49,7 @@ def connect_new_button():
 def init_devices():	
 	rows = db_flicdeamon.execute("SELECT bdaddr, color FROM users").fetchall()
 	for i, row in enumerate(rows):
-		devices.append(Device(bdAddr = row['0'], user = i, colour = row['1']))
+		DEVICES.append(Device(bdAddr = row['0'], user = i, colour = row['1']))
 
 # socketio.on('connect')
 # def send_devices():
