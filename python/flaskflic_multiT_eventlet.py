@@ -38,7 +38,7 @@ db_flicdeamon = sqlite3.connect('../bin/armv6l/flicd.sqlite.db')
 
 @app.route('/')
 def index():
-	return render_template('index.html', devices = devices)
+	return render_template('index.html', devices = DEVICES)
 
 
 @socketio.on('connect new button')
@@ -51,13 +51,6 @@ def init_devices():
 	for i, row in enumerate(rows):
 		DEVICES.append(Device(bdAddr = row['0'], user = i, colour = row['1']))
 
-# socketio.on('connect')
-# def send_devices():
-# 	socketio.emit('init devices', devices = devices)
-
-# @socketio.on('single click', bdAddr)
-# def received_single_click():
-# 	print('received_single_click', bdAddr)
 
 def socket_handle_single_click(bdAddr):
 	print('socket_handle_single_click', bdAddr)
@@ -65,14 +58,6 @@ def socket_handle_single_click(bdAddr):
 
 # --------------------- FLIC THREAD ---------------------
 
-# class T(threading.Thread):
-
-# 	def __init__(self):
-# 		threading.Thread.__init__(self)
-# 		# self._lock = threading.RLock()
-		# self.daemon = True
-
-# 	def run(self):
 
 def background_thread():
 
@@ -163,18 +148,14 @@ def background_thread():
 
 
 
-# T().start()
-
-# with thread_lock:
-eventlet.spawn(background_thread)
-
-
 # --------------------- RUN TIME ---------------------
 
+eventlet.spawn(background_thread)
+init_devices()
 
 if __name__ == '__main__':
 
-    init_devices()
+    
     socketio.run(app, debug=True, host='0.0.0.0', port=5000)
 
 
