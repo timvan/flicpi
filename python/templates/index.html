@@ -20,14 +20,26 @@
 			<thead>
 				<tr>
 					<th>bdAddr</th>
+					<th>user</th>
+					<th>Colour</th>
 					<th>Status</th>
 					<th>Disruption</th>
 					<th>Total</th>
 				</tr>
 			</thead>
 			<tbody>
-				
+				{% for device in devices %}
+					<tr>
+						<th>device.bdAddr</th>
+						<th>device.user</th>
+						<th>device.colour</th>
+						<th>device.status</th>
+						<th></th>
+						<th></th>
+					</tr>
+				{% endfor %}
 			</tbody>
+				}
 		</table>
 	</div>
 

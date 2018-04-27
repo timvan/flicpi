@@ -7,6 +7,23 @@ import sqlite3
 import threading
 
 
+
+
+devices = []
+
+
+class Device():
+	def __init__(self, bdAddr, user, colour):
+		self.bdAddr = bdAddr
+		self.user = user
+		self.colour = colour
+		self.status = False #<< is this going to lead to conflicting sources of truth
+
+	# def status_change(self):
+
+
+
+
 # --------------------- FLASK APP  ---------------------
 
 app = Flask(__name__)
@@ -17,18 +34,26 @@ socketio = SocketIO(app)
 
 @app.route('/')
 def index():
-	return render_template('index.html')
+	return render_template('index.html', devices = devices)
 
 
-@socketio.on('my event')
-def handle_my_event(json):
-	print('received json:', str(json))
+@socketio.on('connect new button')
+def connect_new_button():
+	pass
 
+
+
+def handle_single_click(bdAddr):
+	pass
 
 
 # --------------------- FLIC THREAD ---------------------
 
 class T(threading.Thread):
+
+	def __init__(self):
+		threading.Thread.__init__(self)
+		# self._lock = threading.RLock()
 
 	def run(self):
 
@@ -63,12 +88,11 @@ class T(threading.Thread):
 
 			if click_type is fliclib.ClickType.ButtonSingleClick:
 				handle_single_click(bdAddr)
+			else:
+				print("No process to handle click type:" fliclib.ClickType)
 
 
 		def handle_single_click(bdAddr):
-			
-
-			socketio.emit('single click', bdAddr)
 
 			timestamp, disturbed = get_last(bdAddr)
 
@@ -76,41 +100,42 @@ class T(threading.Thread):
 
 			if disturbed:
 				distrubance = datetime.now() - timestamp
-				print("[handle_single_click]", bdAddr, "was disturbed for", str(distrubance))
+				print(bdAddr + " was disturbed for " + str(distrubance) + '.')
 				db.execute("INSERT INTO disturbances VALUES (?, ?, ?)", (timestamp, bdAddr, distrubance.total_seconds()))
 
-				print("[handle_single_click] Total disturbed: " + str(get_total_disturbance(bdAddr)) + "s")
 			else:
-				print("[handle_single_click]", bdAddr, "is now disturbed")
+				print(bdAddr, "is now disturbed...")
 
-			
-			print("[handle_single_click] INSERTING", (datetime.now(), bdAddr, not disturbed, ))
 			db.execute("INSERT INTO event_log VALUES (?, ?, ?)", (datetime.now(), bdAddr, not disturbed, ))
 			db.commit()
 			
 
 		def get_last(bdAddr):
+			""" 
+			Get the last entry of this bdAddr in event_log. 
+			Return the status and the time of log.
+			If does not exist return False and datetime.now().
+			"""
 
-			row = db.execute("SELECT * FROM event_log WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", (bdAddr, )).fetchone()
+			row = db.execute("SELECT * FROM event_log WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", (bdAddr, )).fetchone()			
 			
-			if row is None:
-				return (datetime.now(), False)
+			if row is not None:
+					return dateutil.parser.parse(row[0]), bool(row[2])
 
-			if bool(row[2]):
-				return dateutil.parser.parse(row[0]), True
-
-			return dateutil.parser.parse(row[0]),  False
+			return (datetime.now(), False)
 
 
 		def get_total_disturbance(bdAddr):
-
+			"""
+			Sum total disturbances for this bdAddr in disturbances.
+			Return rounded total.
+			"""
 			total = db.execute("SELECT SUM(disturbance) FROM disturbances WHERE bdAddr=?", (bdAddr,)).fetchone()
 			return round(total[0], 0)
 
+
 		client.get_info(got_info)
-
 		client.on_new_verified_button = got_button
-
 		client.handle_events()
 
 
