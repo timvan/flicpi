@@ -6,6 +6,7 @@ import fliclib
 import sqlite3
 import threading
 from threading import Lock
+import json
 
 # thread_lock = Lock()
 
@@ -82,7 +83,7 @@ def update_state_tabe():
 		table.append(row)
 
 	print(table)
-	socketio.emit('update state table', table)
+	socketio.emit('update state table', json.dump(table))
 
 
 
