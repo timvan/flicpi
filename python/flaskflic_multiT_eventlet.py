@@ -49,7 +49,7 @@ def connect_new_button():
 def init_devices():	
 	rows = db_flicdeamon.execute("SELECT bdaddr, color FROM buttons").fetchall()
 	for i, row in enumerate(rows):
-		DEVICES.append(Device(row['0'], i, row['1']))
+		DEVICES.append(Device(bdAddr = row[0], user = i, colour = row[1]))
 
 
 def socket_handle_single_click(bdAddr):
