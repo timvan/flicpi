@@ -51,7 +51,7 @@ def connect_new_button():
 # 	print('received_single_click', bdAddr)
 
 def socket_handle_single_click(bdAddr):
-	print('socket_handle_single_click')
+	print('socket_handle_single_click', bdAddr)
 	socketio.emit('single click', bdAddr)
 
 # --------------------- FLIC THREAD ---------------------
