@@ -161,8 +161,7 @@ if __name__ == '__main__':
         if thread is None:
             thread = socketio.start_background_task(target=background_thread)
     
-
-	socketio.run(app, debug=True, host='0.0.0.0', port=5000)
+    socketio.run(app, debug=True, host='0.0.0.0', port=5000)
 
 
     
