@@ -44,8 +44,8 @@ def connect_new_button():
 
 
 def socket_handle_single_click(bdAddr):
-	print('socket_handle_single_click')
-	socketio.emit('single click', bdAddr)
+	print('socket_handle_single_click', bdAddr)
+	socketio.emit('single click', {data: bdAddr})
 
 # --------------------- FLIC THREAD ---------------------
 
@@ -88,6 +88,7 @@ class T(threading.Thread):
 
 			if click_type is fliclib.ClickType.ButtonSingleClick:
 				handle_single_click(bdAddr)
+				socket_handle_single_click(bdAddr)
 			else:
 				print("No process to handle click type:",  str(fliclib.ClickType))
 
