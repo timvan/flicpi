@@ -24,8 +24,6 @@ class Device():
 
 	# def status_change(self):
 
-
-
 # --------------------- FLASK APP  ---------------------
 
 app = Flask(__name__)
@@ -34,11 +32,11 @@ app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app)
 
 db_flicdeamon = sqlite3.connect('../bin/armv6l/flicd.sqlite.db')
-
+db_flicpi =  sqlite3.connect('flicpi.db')
 
 @app.route('/')
 def index():
-	return render_template('index.html', devices = DEVICES)
+	return render_template('index.html')
 
 
 @socketio.on('connect new button')
@@ -50,6 +48,40 @@ def init_devices():
 	rows = db_flicdeamon.execute("SELECT bdaddr, color FROM buttons").fetchall()
 	for i, row in enumerate(rows):
 		DEVICES.append(Device(bdAddr = row[0], user = i, colour = row[1]))
+
+
+def get_state(bdAddr):
+	""" 
+	Get the last entry of this bdAddr in event_log. 
+	Return the status and the time of log.
+	If does not exist return False and datetime.now().
+	"""
+
+	row = db_flicpi.execute("SELECT * FROM event_log WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", (bdAddr, )).fetchone()			
+	
+	if row is not None:
+		return bool(row[2])
+
+	return False
+
+
+
+def update_state_tabe():
+	table = []
+
+	devs = db_flicdeamon.execute("SELECT bdaddr, color FROM buttons").fetchall()
+
+	for i, device in enumerate(devs):
+		row = {
+			'bdAddr' : device[0],
+			'color' : device[1],
+			'user' : i
+			'state' : get_state(device[0]),
+		}
+		table.append(row)
+
+	socketio.emit('update state table', table)
+
 
 
 def socket_handle_single_click(bdAddr):
@@ -100,6 +132,7 @@ def background_thread():
 
 		# socketio.emit('single click', bdAddr)
 		socket_handle_single_click(bdAddr)
+		update_state_tabe()
 
 		timestamp, disturbed = get_last(bdAddr)
 
@@ -128,7 +161,7 @@ def background_thread():
 		row = db.execute("SELECT * FROM event_log WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", (bdAddr, )).fetchone()			
 		
 		if row is not None:
-				return dateutil.parser.parse(row[0]), bool(row[2])
+			return dateutil.parser.parse(row[0]), bool(row[2])
 
 		return (datetime.now(), False)
 
@@ -151,7 +184,7 @@ def background_thread():
 # --------------------- RUN TIME ---------------------
 
 eventlet.spawn(background_thread)
-init_devices()
+# init_devices()
 
 if __name__ == '__main__':
 

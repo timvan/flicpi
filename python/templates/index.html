@@ -16,7 +16,7 @@
 	<div>Socket Status: <span id="socket_status">Disconnected</span></div>
 
 	<div>
-		<table>
+		<table id="state_table">
 			<thead>
 				<tr>
 					<th>bdAddr</th>
@@ -28,7 +28,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				{% for device in devices %}
+<!-- 				{% for device in devices %}
 					<tr>
 						<th>{{ device.bdAddr }}</th>
 						<th>{{ device.user }}</th>
@@ -37,7 +37,7 @@
 						<th></th>
 						<th></th>
 					</tr>
-				{% endfor %}
+				{% endfor %} -->
 			</tbody>
 		</table>
 	</div>
@@ -66,6 +66,11 @@
     	console.log(data, 'Single click pressed');
     	$single_click.html('Single click pressed');
 
+    })
+
+
+    socket.on('update state table', function(data) {
+    	console.log(data, 'update state table');
     })
 
 </script>
