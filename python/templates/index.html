@@ -62,16 +62,16 @@
     	$socket_status.html('Disconnected');
     });
 
-    socket.on('single click', function(data) {
-    	console.log(data, 'Single click pressed');
-    	$single_click.html('Single click pressed');
+    // socket.on('single click', function(data) {
+    // 	console.log(data, 'Single click pressed');
+    // 	$single_click.html('Single click pressed');
 
-    })
+    // });
 
 
     socket.on('update state table', function(data) {
-    	console.log(data, 'update state table');
-    })
+    	console.log(data);
+    });
 
 </script>
 

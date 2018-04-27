@@ -36,6 +36,7 @@ db_flicpi =  sqlite3.connect('flicpi.db')
 
 @app.route('/')
 def index():
+	update_state_tabe()
 	return render_template('index.html')
 
 
@@ -85,9 +86,9 @@ def update_state_tabe():
 
 
 
-def socket_handle_single_click(bdAddr):
-	print('socket_handle_single_click', bdAddr)
-	socketio.emit('single click', bdAddr)
+# def socket_handle_single_click(bdAddr):
+# 	print('socket_handle_single_click', bdAddr)
+# 	socketio.emit('single click', bdAddr)
 
 # --------------------- FLIC THREAD ---------------------
 
@@ -132,7 +133,7 @@ def background_thread():
 	def handle_single_click(bdAddr):
 
 		# socketio.emit('single click', bdAddr)
-		socket_handle_single_click(bdAddr)
+		# socket_handle_single_click(bdAddr)
 		update_state_tabe()
 
 		timestamp, disturbed = get_last(bdAddr)
