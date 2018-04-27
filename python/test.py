@@ -56,15 +56,38 @@ def get_total_disturbance(bdAddr):
 
 def get_users():
 
-	rows = db.execute("SELECT * FROM event_log").fetchall()
+	rows = db.execute("SELECT timestamp, bdAddr FROM event_log").fetchall()
 
 	for row in rows:
 
-		print(row[0])
+		print(row[0], row[1])
+
+
+
 
 
 get_users()
 
+
+
+devices = []
+
+class Device():
+	def __init__(self, bdAddr, user, colour):
+		self.bdAddr = bdAddr
+		self.user = user
+		self.colour = colour
+		self.status = False #<< is this going to lead to conflicting sources of truth
+
+
+db_flicdeamon = sqlite3.connect('../bin/armv6l/flicd.sqlite.db')
+def init_devices():	
+	rows = db_flicdeamon.execute("SELECT * FROM buttons").fetchall()
+	for i, row in enumerate(rows):
+		devices.append(Device(bdAddr = row['bdAddr'], user = i, colour = row['color']))
+
+# init_devices()
+# print(devices)
 
 # for row in db.execute("SELECT * FROM event_log WHERE bdAddr=?", (bdAddr, )):
 # 	print("ROW:", row)

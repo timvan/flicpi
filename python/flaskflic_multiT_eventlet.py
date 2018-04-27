@@ -33,6 +33,8 @@ app.config['SECRET_KEY'] = 'secret!'
 
 socketio = SocketIO(app)
 
+db_flicdeamon = sqlite3.connect('../bin/armv6l/flicd.sqlite.db')
+
 
 @app.route('/')
 def index():
@@ -45,9 +47,9 @@ def connect_new_button():
 
 
 def init_devices():	
-	rows = db.execute("SELECT * FROM users").fetchall()
-	for row in rows:
-		devices.append(Device(bdAddr = row[0], user = row[1], colour = row[2]))
+	rows = db_flicdeamon.execute("SELECT bdaddr, color FROM users").fetchall()
+	for i, row in enumerate(rows):
+		devices.append(Device(bdAddr = row['0'], user = i, colour = row['1']))
 
 # socketio.on('connect')
 # def send_devices():
@@ -171,7 +173,7 @@ eventlet.spawn(background_thread)
 
 
 if __name__ == '__main__':
-	
+
     init_devices()
     socketio.run(app, debug=True, host='0.0.0.0', port=5000)
 
