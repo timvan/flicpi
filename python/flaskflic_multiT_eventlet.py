@@ -83,7 +83,7 @@ def update_state_tabe():
 		table.append(row)
 
 	print(table)
-	socketio.emit('update state table', json.dump(table))
+	socketio.emit('update state table', json.dumps(table))
 
 
 
