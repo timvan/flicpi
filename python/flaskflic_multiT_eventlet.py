@@ -80,6 +80,7 @@ def update_state_tabe():
 		}
 		table.append(row)
 
+	print(table)
 	socketio.emit('update state table', table)
 
 
