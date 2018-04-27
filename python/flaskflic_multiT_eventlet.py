@@ -69,6 +69,7 @@ def get_state(bdAddr):
 
 
 def update_state_tabe():
+
 	table = []
 
 	devs = db_flicdeamon.execute("SELECT bdaddr, color FROM buttons").fetchall()
@@ -83,7 +84,7 @@ def update_state_tabe():
 		table.append(row)
 
 	
-	socketio.emit('update state table', data = table)
+	socketio.emit('update state table', data = json.dumps(table))
 
 
 
