@@ -44,7 +44,9 @@ def connect_new_button():
 	pass
 
 
-
+@socketio.on('single click', bdAddr)
+def received_single_click():
+	print('received_single_click', bdAddr)
 
 def socket_handle_single_click(bdAddr):
 	print('socket_handle_single_click')
