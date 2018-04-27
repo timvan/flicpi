@@ -7,7 +7,7 @@ import sqlite3
 import threading
 from threading import Lock
 
-thread_lock = Lock()
+# thread_lock = Lock()
 
 
 
@@ -42,6 +42,7 @@ def index():
 @socketio.on('connect new button')
 def connect_new_button():
 	pass
+
 
 
 
@@ -149,13 +150,15 @@ def background_thread():
 
 # T().start()
 
+# with thread_lock:
+thread = socketio.start_background_task(target=background_thread)
+
+
 # --------------------- RUN TIME ---------------------
 
 
 if __name__ == '__main__':
 
-    with thread_lock:
-        thread = socketio.start_background_task(target=background_thread)
     
     socketio.run(app, debug=True, host='0.0.0.0', port=5000)
 
