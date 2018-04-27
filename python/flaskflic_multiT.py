@@ -89,7 +89,7 @@ class T(threading.Thread):
 			if click_type is fliclib.ClickType.ButtonSingleClick:
 				handle_single_click(bdAddr)
 			else:
-				print("No process to handle click type:" fliclib.ClickType)
+				print("No process to handle click type:",  str(fliclib.ClickType))
 
 
 		def handle_single_click(bdAddr):
