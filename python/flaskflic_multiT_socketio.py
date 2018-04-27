@@ -151,14 +151,13 @@ def background_thread():
 # T().start()
 
 # with thread_lock:
-thread = socketio.start_background_task(target=background_thread)
+socketio.start_background_task(target=background_thread)
 
 
 # --------------------- RUN TIME ---------------------
 
 
 if __name__ == '__main__':
-
     
     socketio.run(app, debug=True, host='0.0.0.0', port=5000)
 
