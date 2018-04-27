@@ -73,10 +73,10 @@ def update_state_tabe():
 
 	for i, device in enumerate(devs):
 		row = {
-			'bdAddr' : device[0],
-			'color' : device[1],
-			'user' : i
-			'state' : get_state(device[0]),
+			'bdAddr': device[0],
+			'color': device[1],
+			'user': i,
+			'state': get_state(device[0]),
 		}
 		table.append(row)
 
