@@ -94,8 +94,6 @@ class T(threading.Thread):
 
 		def handle_single_click(bdAddr):
 
-			socket_handle_single_click(bdAddr)
-
 			timestamp, disturbed = get_last(bdAddr)
 
 			print("[handle_single_click] get_last returned", timestamp, disturbed)
