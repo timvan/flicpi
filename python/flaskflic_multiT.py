@@ -43,9 +43,8 @@ def connect_new_button():
 
 
 
-def handle_single_click(bdAddr):
-	pass
-
+def socket_handle_single_click(bdAddr):
+	socketio.emit('single click', bdAddr)
 
 # --------------------- FLIC THREAD ---------------------
 
@@ -94,7 +93,7 @@ class T(threading.Thread):
 
 		def handle_single_click(bdAddr):
 
-			socketio.emit('single click', bdAddr)
+			socket_handle_single_click(bdAddr)
 
 			timestamp, disturbed = get_last(bdAddr)
 
