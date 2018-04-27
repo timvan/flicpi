@@ -15,7 +15,6 @@ eventlet.monkey_patch()
 
 devices = []
 
-
 class Device():
 	def __init__(self, bdAddr, user, colour):
 		self.bdAddr = bdAddr
@@ -24,7 +23,6 @@ class Device():
 		self.status = False #<< is this going to lead to conflicting sources of truth
 
 	# def status_change(self):
-
 
 
 
@@ -45,6 +43,15 @@ def index():
 def connect_new_button():
 	pass
 
+
+def init_devices():	
+	rows = db.execute("SELECT * FROM users").fetchall()
+	for row in rows:
+		devices.append(Device(bdAddr = row[0], user = row[1], colour = row[2]))
+
+# socketio.on('connect')
+# def send_devices():
+# 	socketio.emit('init devices', devices = devices)
 
 # @socketio.on('single click', bdAddr)
 # def received_single_click():
@@ -115,6 +122,7 @@ def background_thread():
 			distrubance = datetime.now() - timestamp
 			print(bdAddr + " was disturbed for " + str(distrubance) + '.')
 			db.execute("INSERT INTO disturbances VALUES (?, ?, ?)", (timestamp, bdAddr, distrubance.total_seconds()))
+			db.commit()
 
 		else:
 			print(bdAddr, "is now disturbed...")
@@ -163,7 +171,8 @@ eventlet.spawn(background_thread)
 
 
 if __name__ == '__main__':
-    
+	
+    init_devices()
     socketio.run(app, debug=True, host='0.0.0.0', port=5000)
 
 

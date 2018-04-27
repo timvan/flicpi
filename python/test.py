@@ -52,9 +52,18 @@ def get_total_disturbance(bdAddr):
 
 
 
-handle_single_click(bdAddr)
+# handle_single_click(bdAddr)
+
+def get_users():
+
+	rows = db.execute("SELECT * FROM event_log").fetchall()
+
+	for row in rows:
+
+		print(row[0])
 
 
+get_users()
 
 
 # for row in db.execute("SELECT * FROM event_log WHERE bdAddr=?", (bdAddr, )):
