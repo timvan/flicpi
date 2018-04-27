@@ -7,7 +7,6 @@ import sqlite3
 import threading
 from threading import Lock
 
-thread = None
 thread_lock = Lock()
 
 
@@ -61,7 +60,7 @@ def socket_handle_single_click(bdAddr):
 
 # 	def run(self):
 
-def backgroun_thread():
+def background_thread():
 
 	print("Running T...")
 
@@ -155,11 +154,8 @@ def backgroun_thread():
 
 if __name__ == '__main__':
 
-
-    global thread
     with thread_lock:
-        if thread is None:
-            thread = socketio.start_background_task(target=background_thread)
+        thread = socketio.start_background_task(target=background_thread)
     
     socketio.run(app, debug=True, host='0.0.0.0', port=5000)
 
