@@ -68,7 +68,7 @@
 
     // });
 
-    var $state_table = $('#state_tablebody')
+    var $state_table = $('#state_tablebody');
     socket.on('update state table', function(data) {
     	console.log(data);
     	var str = ''
@@ -76,6 +76,7 @@
     		str += ('<tr><td>' + data[i]['bdAddr'] + '</td><td>' + data[i]['user'] + '</td><td>' + data[i]['colour'] + '</td><td>' + data[i]['status'] + '</td><td></td><td></td></tr>');
 
     	};
+    	console.log(str);
     	$state_table.children().remove();
     	$state_table.append(str);
 
