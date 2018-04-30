@@ -85,11 +85,12 @@
     // });
 
     var $state_tablebody = $('#state_tablebody');
+
     socket.on('update state table', function(data) {
     	console.log(data);
     	var str = ''
     	for (var i = 0; i < data.length; i++){
-    		str += ('<tr>')
+    		str += ('<tr bdAddr="' + data[i]['bdAddr'] + '">')
     		str += ('<td>' + String(data[i]['bdAddr']) + '</td><td>' + String(data[i]['user']) + '</td><td>' + String(data[i]['color']) + '</td><td>' + String(data[i]['state']) + '</td>')
 
     		if(String(data[i]['state']) == 'true'){
@@ -106,6 +107,23 @@
     	$state_tablebody.append(str);
 
     });
+
+    function() {
+    	var $rows = $(state_tablebody).find('td.current_disruption')
+
+    	$rows.each(function(){
+    		if($(this).hasClass('active')){
+	    		var t = new Date($(this).attr('disruption_start'));
+	    		var t_change = Date.now() - t;
+	    		$(this).text(t_change);
+	    	}else{
+	    		$(this).text("");
+	    	}
+    	});
+
+
+
+    };
 
 </script>
 
