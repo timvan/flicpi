@@ -69,7 +69,7 @@ def update_state_tabe():
 
 	for i, device in enumerate(devs):
 		timestamp, state = get_last_time_and_state(device[0])
-		daily_total = get_daily_total(bdAddr)
+		daily_total = get_daily_total(device[0])
 		row = {
 			'bdAddr': device[0],
 			'color': device[1],
