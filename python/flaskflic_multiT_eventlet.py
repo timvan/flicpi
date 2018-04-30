@@ -74,7 +74,7 @@ def update_state_tabe():
 			'color': device[1],
 			'user': i,
 			'state': state,
-			'disruption_start': json.dumps(timestamp, default=date_handler) if state else None,
+			'disruption_start': timestamp.ctime() if state else None,
 		}
 		table.append(row)
 
