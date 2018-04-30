@@ -60,7 +60,8 @@ def get_state(bdAddr):
 	"""
 
 	row = db_flicpi.execute("SELECT * FROM event_log WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", (bdAddr, )).fetchone()			
-	
+	print('1[get_state]', row)
+
 	if row is not None:
 		return bool(row[2])
 
@@ -141,18 +142,20 @@ def background_thread():
 
 		timestamp, disturbed = get_last(bdAddr)
 
-		print("[handle_single_click] get_last returned", timestamp, disturbed)
+		
 
 		if disturbed:
 			distrubance = datetime.now() - timestamp
 			print(bdAddr + " was disturbed for " + str(distrubance) + '.')
 			db.execute("INSERT INTO disturbances VALUES (?, ?, ?)", (timestamp, bdAddr, distrubance.total_seconds()))
+			print("2.2[handle_single_click] - inserted into disturbances", bdAddr)
 			db.commit()
 
 		else:
 			print(bdAddr, "is now disturbed...")
 
 		db.execute("INSERT INTO event_log VALUES (?, ?, ?)", (datetime.now(), bdAddr, not disturbed, ))
+		print("2.3[handle_single_click] - inserted into event_log", bdAddr)
 		db.commit()
 		
 
@@ -164,7 +167,8 @@ def background_thread():
 		"""
 
 		row = db.execute("SELECT * FROM event_log WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", (bdAddr, )).fetchone()			
-		
+		print("2.1[get_last]", row)
+
 		if row is not None:
 			return dateutil.parser.parse(row[0]), bool(row[2])
 
