@@ -98,8 +98,9 @@
     		}else{
     			str += ('<td class="current_disruption"></td>');
     		}
-    		
-    		str += ('<td></td></tr>');
+    	
+    		str += ('<td>' + String(data[i]['daily_total']) + '</td>')
+    		str += ('</tr>')
 
     	};
     	console.log(str);

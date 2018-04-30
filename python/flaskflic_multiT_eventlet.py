@@ -69,12 +69,14 @@ def update_state_tabe():
 
 	for i, device in enumerate(devs):
 		timestamp, state = get_last_time_and_state(device[0])
+		daily_total = get_daily_total(bdAddr)
 		row = {
 			'bdAddr': device[0],
 			'color': device[1],
 			'user': i,
 			'state': state,
 			'disruption_start': timestamp.ctime() if state else None,
+			'daily_total': daily_total if daily_total else 0;
 		}
 		table.append(row)
 
@@ -82,6 +84,11 @@ def update_state_tabe():
 	
 	socketio.emit('update state table', table)
 
+
+def get_daily_total(bdAddr):
+
+	total = db_flicpi.execute("SELECT SUM(disturbance) FROM disturbances WHERE bdAddr=? AND timestamp > date('now', 'start of day')", (bdAddr,)).fetchone()
+	return total
 
 # def socket_handle_single_click(bdAddr):
 # 	print('socket_handle_single_click', bdAddr)
