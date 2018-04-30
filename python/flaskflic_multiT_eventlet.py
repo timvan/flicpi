@@ -76,7 +76,7 @@ def update_state_tabe():
 			'user': i,
 			'state': state,
 			'disruption_start': timestamp.ctime() if state else None,
-			'daily_total': daily_total if daily_total else 0;
+			'daily_total': daily_total if daily_total else 0,
 		}
 		table.append(row)
 
