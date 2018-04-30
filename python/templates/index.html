@@ -110,6 +110,11 @@
 
     var repeater;
 
+    function repeat_counter() {
+    	repeater = setInterval(counter, 1000);
+	}
+
+
     function counter() {
     	var $rows = $(state_tablebody).find('td.current_disruption')
 
@@ -120,14 +125,12 @@
 	    		$(this).text(t_change);
 	    	}else{
 	    		$(this).text("");
-	    	}
+	    	};
     	});
-
-    	
     };
 
-    repeater = setInterval(counter, 1000);
-    counter();
+    
+    repeat_counter();
 
 </script>
 
