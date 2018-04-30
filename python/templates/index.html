@@ -94,7 +94,7 @@
     		str += ('<td>' + String(data[i]['bdAddr']) + '</td><td>' + String(data[i]['user']) + '</td><td>' + String(data[i]['color']) + '</td><td>' + String(data[i]['state']) + '</td>')
 
     		if(String(data[i]['state']) == 'true'){
-    			str += ('<td class="current_disruption active" diruption_start="' + String(data[i]['disruption_start']) + '"></td>');
+    			str += ('<td class="current_disruption active" disruption_start="' + String(data[i]['disruption_start']) + '"></td>');
     		}else{
     			str += ('<td class="current_disruption"></td>');
     		}
@@ -113,6 +113,7 @@
 
     	$rows.each(function(index, value){
     		if($(this).hasClass('active')){
+    			console.log($(this).attr('disruption_start'))
 	    		var t = new Date($(this).attr('disruption_start'));
 	    		console.log('t', t);
 	    		var t_change = Date.now() - t;
