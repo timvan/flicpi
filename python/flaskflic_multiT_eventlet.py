@@ -143,7 +143,6 @@ def background_thread():
 			db.execute("INSERT INTO disturbances VALUES (?, ?, ?)", (timestamp, bdAddr, distrubance.total_seconds()))
 			print("2.2[handle_single_click] - inserted into disturbances", bdAddr)
 			db.commit()
-			stop_counter(bdAddr)
 
 		else:
 			print(bdAddr, "is now disturbed...")
