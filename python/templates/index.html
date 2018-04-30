@@ -142,7 +142,7 @@
     	var values = [days, hours, minutes];
 
     	for(var j = 0; j < values.length; j++){
-    		lst.append(String(values[j]) + units[j]);
+    		lst.push(String(values[j]) + units[j]);
     	};
 
     	var rendered_time = lst.join(" ");
