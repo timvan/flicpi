@@ -99,7 +99,7 @@
     			str += ('<td class="current_disruption"></td>');
     		}
     	
-    		str += ('<td>' + String(data[i]['daily_total']) + '</td>')
+    		str += ('<td>' + milliseconds_to_string(data[i]['daily_total']) + '</td>')
     		str += ('</tr>')
 
     	};
@@ -129,6 +129,27 @@
     	});
     }, 1000);
 
+    function milliseconds_to_string(millis) {
+    	var secs = Math.floor(millis / 1000);
+
+    	var days = Math.floor(secs / (60 * 60 * 8));
+    	var hours = Math.floor(secs / (60 * 60)) % 8;
+    	var minutes = Math.floor(secs / 60) % 60;
+
+    	var units = ['d', 'h', 'm'];
+
+    	var lst = [];
+    	var values = [days, hours, minutes];
+
+    	for(var j = 0; j < values.length; j++){
+    		lst.append(String(vales[j]) + units[j]);
+    	};
+
+    	var rendered_time = list.join(" ");
+
+    	return rendered_time;
+
+    }
 
 </script>
 
