@@ -74,7 +74,7 @@ def update_state_tabe():
 			'color': device[1],
 			'user': i,
 			'state': state,
-			'disruption_start': timestamp if state else None,
+			'disruption_start': json.dumps(timestamp, default=date_handler) if state else None,
 		}
 		table.append(row)
 
@@ -147,7 +147,7 @@ def background_thread():
 
 		else:
 			print(bdAddr, "is now disturbed...")
-			
+
 		db.execute("INSERT INTO event_log VALUES (?, ?, ?)", (datetime.now(), bdAddr, not disturbed, ))
 		print("2.3[handle_single_click] - inserted into event_log", bdAddr)
 		db.commit()
