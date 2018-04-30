@@ -111,7 +111,7 @@
     var counter = setInterval(function() {
     	var $rows = $(state_tablebody).find('td.current_disruption')
 
-    	$rows.each(function(){
+    	$rows.each(function(index, value){
     		if($(this).hasClass('active')){
 	    		var t = new Date($(this).attr('disruption_start'));
 	    		console.log('t', t);
