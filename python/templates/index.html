@@ -70,8 +70,8 @@
     var $single_click = $('#single_click')
 
     socket.on('connect', function() {
-    	$socket_status.html('page loaded');
-        // socket.emit('connect');
+    	$socket_status.html('Connected');
+        socket.emit('page loaded');
     });
 
     socket.on('disconnect', function() {
@@ -113,12 +113,9 @@
 
     	$rows.each(function(index, value){
     		if($(this).hasClass('active')){
-    			console.log($(this).attr('disruption_start'))
 	    		var t = new Date($(this).attr('disruption_start'));
-	    		console.log('t', t);
-	    		var t_change = Date.now() - t;
-	    		console.log(t_change)
-	    		$(this).text(t_change);
+	    		var t_change = (Date.now() - t) / 1000;
+	    		$(this).text(t_change + 's');
 	    	}else{
 	    		$(this).text("");
 	    	};
