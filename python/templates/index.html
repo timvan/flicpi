@@ -73,7 +73,7 @@
     	console.log(data);
     	var str = ''
     	for (var i = 0; i < data.length; i++){
-    		str += ('<tr><td>' + data[i]['bdAddr'] + '</td><td>' + data[i]['user'] + '</td><td>' + data[i]['colour'] + '</td><td>' + data[i]['status'] + '</td><td></td><td></td></tr>');
+    		str += ('<tr><td>' + str(data[i]['bdAddr']) + '</td><td>' + str(data[i]['user']) + '</td><td>' + str(data[i]['colour']) + '</td><td>' + str(data[i]['status']) + '</td><td></td><td></td></tr>');
 
     	};
     	console.log(str);
