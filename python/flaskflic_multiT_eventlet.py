@@ -138,7 +138,7 @@ def background_thread():
 
 		# socketio.emit('single click', bdAddr)
 		# socket_handle_single_click(bdAddr)
-		update_state_tabe()
+		
 
 		timestamp, disturbed = get_last(bdAddr)
 
@@ -157,6 +157,8 @@ def background_thread():
 		db.execute("INSERT INTO event_log VALUES (?, ?, ?)", (datetime.now(), bdAddr, not disturbed, ))
 		print("2.3[handle_single_click] - inserted into event_log", bdAddr)
 		db.commit()
+
+		update_state_tabe()
 		
 
 	def get_last(bdAddr):
