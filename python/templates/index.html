@@ -117,7 +117,7 @@
 	    		var t_change = Math.floor((Date.now() - t) / 1000);
 	    		
 	    		if(t_change >= 60){
-	    			$(this).text((t_change % 60)  + 'm');
+	    			$(this).text(Math.floor(t_change / 60)  + 'm');
 	    		}else{
 	    			$(this).text(t_change + 's');	
 	    		};
