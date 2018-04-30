@@ -114,7 +114,7 @@
     	$rows.each(function(index, value){
     		if($(this).hasClass('active')){
 	    		var t = new Date($(this).attr('disruption_start'));
-	    		var t_change = (Date.now() - t) / 1000;
+	    		var t_change = Math.floor((Date.now() - t) / 1000);
 	    		$(this).text(t_change + 's');
 	    	}else{
 	    		$(this).text("");
