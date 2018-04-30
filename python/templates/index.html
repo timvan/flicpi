@@ -130,11 +130,11 @@
     }, 1000);
 
 
-    function milliseconds_to_string(millis) {
+    function secs_to_string(secs) {
 
-    	console.log(millis);
+    	// console.log(millis);
 
-    	var secs = Math.floor(millis / 1000);
+    	secs = Math.floor(secs);
 
     	var days = Math.floor(secs / (60 * 60 * 8));
     	var hours = Math.floor(secs / (60 * 60)) % 8;
