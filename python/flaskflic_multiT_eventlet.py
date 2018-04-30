@@ -83,9 +83,6 @@ def update_state_tabe():
 	socketio.emit('update state table', table)
 
 
-def start_counter(bdAddr):
-	socketio.emit('start counter', bdAddr)
-
 # def socket_handle_single_click(bdAddr):
 # 	print('socket_handle_single_click', bdAddr)
 # 	socketio.emit('single click', bdAddr)
@@ -150,8 +147,7 @@ def background_thread():
 
 		else:
 			print(bdAddr, "is now disturbed...")
-			start_count(bdAddr)
-
+			
 		db.execute("INSERT INTO event_log VALUES (?, ?, ?)", (datetime.now(), bdAddr, not disturbed, ))
 		print("2.3[handle_single_click] - inserted into event_log", bdAddr)
 		db.commit()
