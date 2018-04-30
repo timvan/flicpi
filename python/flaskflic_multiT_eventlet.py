@@ -16,12 +16,12 @@ eventlet.monkey_patch()
 global DEVICES
 DEVICES = []
 
-class Device():
-	def __init__(self, bdAddr, user, colour):
-		self.bdAddr = bdAddr
-		self.user = user
-		self.colour = colour
-		self.status = False #<< is this going to lead to conflicting sources of truth
+# class Device():
+# 	def __init__(self, bdAddr, user, colour):
+# 		self.bdAddr = bdAddr
+# 		self.user = user
+# 		self.colour = colour
+# 		self.status = False #<< is this going to lead to conflicting sources of truth
 
 	# def status_change(self):
 
