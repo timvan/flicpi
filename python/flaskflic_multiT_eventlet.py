@@ -37,9 +37,7 @@ db_flicpi =  sqlite3.connect('flicpi.db')
 
 @app.route('/')
 def index():
-	render_template('index.html')
-	update_state_tabe()
-	return
+	return render_template('index.html')
 
 
 @socketio.on('connect new button')
@@ -62,7 +60,7 @@ def get_last_time_and_state(bdAddr):
 	return datetime.now(), False
 
 
-
+@socketio.on('page loaded')
 def update_state_tabe():
 
 	table = []
