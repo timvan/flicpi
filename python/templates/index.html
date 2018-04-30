@@ -27,7 +27,7 @@
 					<th>Total</th>
 				</tr>
 			</thead>
-			<tbody id="sate_tablebody">
+			<tbody id="state_tablebody">
 <!-- 				{% for device in devices %}
 					<tr>
 						<th>{{ device.bdAddr }}</th>
@@ -68,7 +68,7 @@
 
     // });
 
-    var $state_table = $('#state_tablebody');
+    var $state_tablebody = $('#state_tablebody');
     socket.on('update state table', function(data) {
     	console.log(data);
     	var str = ''
