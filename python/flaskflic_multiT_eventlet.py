@@ -88,7 +88,7 @@ def update_state_tabe():
 def get_daily_total(bdAddr):
 
 	total = db_flicpi.execute("SELECT SUM(disturbance) FROM disturbances WHERE bdAddr=? AND timestamp > date('now', 'start of day')", (bdAddr,)).fetchone()
-	return total
+	return total[0]
 
 # def socket_handle_single_click(bdAddr):
 # 	print('socket_handle_single_click', bdAddr)
