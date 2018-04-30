@@ -129,6 +129,7 @@
     	});
     }, 1000);
 
+
     function milliseconds_to_string(millis) {
     	var secs = Math.floor(millis / 1000);
 
@@ -141,9 +142,15 @@
     	var lst = [];
     	var values = [days, hours, minutes];
 
+    	console.log(values);
+
     	for(var j = 0; j < values.length; j++){
-    		lst.push(String(values[j]) + units[j]);
+    		if(values[j] > 0){
+    			lst.push(String(values[j]) + units[j]);
+    		};
     	};
+
+    	console.log(lst);
 
     	var rendered_time = lst.join(" ");
 
