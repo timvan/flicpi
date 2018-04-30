@@ -108,26 +108,21 @@
 
     });
 
-    var repeater;
-
-    function repeat_counter() {
-    	repeater = setInterval(counter, 1000);
-	}
-
-
-    function counter() {
+    var counter = setInterval(function() {
     	var $rows = $(state_tablebody).find('td.current_disruption')
 
     	$rows.each(function(){
     		if($(this).hasClass('active')){
 	    		var t = new Date($(this).attr('disruption_start'));
+	    		console.log('t', t);
 	    		var t_change = Date.now() - t;
+	    		console.log(t_change)
 	    		$(this).text(t_change);
 	    	}else{
 	    		$(this).text("");
 	    	};
     	});
-    };
+    }, 1000);
 
     
     repeat_counter();
