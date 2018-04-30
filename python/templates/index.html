@@ -89,7 +89,16 @@
     	console.log(data);
     	var str = ''
     	for (var i = 0; i < data.length; i++){
-    		str += ('<tr><td>' + String(data[i]['bdAddr']) + '</td><td>' + String(data[i]['user']) + '</td><td>' + String(data[i]['color']) + '</td><td>' + String(data[i]['state']) + '</td><td></td><td></td></tr>');
+    		str += ('<tr>')
+    		str += ('<td>' + String(data[i]['bdAddr']) + '</td><td>' + String(data[i]['user']) + '</td><td>' + String(data[i]['color']) + '</td><td>' + String(data[i]['state']) + '</td>')
+
+    		if(String(data[i]['state']) == 'true'){
+    			str += ('<td class="current_disruption active" diruption_start="' + String(data[i]['disruption_start']) + '"></td>');
+    		}else{
+    			str += ('<td class="current_disruption"></td>');
+    		}
+    		
+    		str += ('<td></td></tr>');
 
     	};
     	console.log(str);

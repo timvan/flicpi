@@ -16,12 +16,12 @@ eventlet.monkey_patch()
 global DEVICES
 DEVICES = []
 
-# class Device():
-# 	def __init__(self, bdAddr, user, colour):
-# 		self.bdAddr = bdAddr
-# 		self.user = user
-# 		self.colour = colour
-# 		self.status = False #<< is this going to lead to conflicting sources of truth
+class Device():
+	def __init__(self, bdAddr, user, colour):
+		self.bdAddr = bdAddr
+		self.user = user
+		self.colour = colour
+		# self.status = False #<< is this going to lead to conflicting sources of truth
 
 	# def status_change(self):
 
@@ -37,22 +37,16 @@ db_flicpi =  sqlite3.connect('flicpi.db')
 
 @app.route('/')
 def index():
+	render_template('index.html')
 	update_state_tabe()
-	return render_template('index.html')
+	return
 
 
 @socketio.on('connect new button')
 def connect_new_button():
 	pass
 
-
-def init_devices():	
-	rows = db_flicdeamon.execute("SELECT bdaddr, color FROM buttons").fetchall()
-	for i, row in enumerate(rows):
-		DEVICES.append(Device(bdAddr = row[0], user = i, colour = row[1]))
-
-
-def get_state(bdAddr):
+def get_last_time_and_state(bdAddr):
 	""" 
 	Get the last entry of this bdAddr in event_log. 
 	Return the status and the time of log.
@@ -63,9 +57,9 @@ def get_state(bdAddr):
 	print('1[get_state]', row)
 
 	if row is not None:
-		return bool(row[2])
+		return dateutil.parser.parse(row[0]), bool(row[2])
 
-	return False
+	return datetime.now(), False
 
 
 
@@ -76,11 +70,13 @@ def update_state_tabe():
 	devs = db_flicdeamon.execute("SELECT bdaddr, color FROM buttons").fetchall()
 
 	for i, device in enumerate(devs):
+		timestamp, state = get_state(device[0])
 		row = {
 			'bdAddr': device[0],
 			'color': device[1],
 			'user': i,
-			'state': get_state(device[0]),
+			'state': state,
+			'disruption_start': timestamp if state else None,
 		}
 		table.append(row)
 
@@ -89,6 +85,8 @@ def update_state_tabe():
 	socketio.emit('update state table', table)
 
 
+def start_counter(bdAddr):
+	socketio.emit('start counter', bdAddr)
 
 # def socket_handle_single_click(bdAddr):
 # 	print('socket_handle_single_click', bdAddr)
@@ -150,9 +148,11 @@ def background_thread():
 			db.execute("INSERT INTO disturbances VALUES (?, ?, ?)", (timestamp, bdAddr, distrubance.total_seconds()))
 			print("2.2[handle_single_click] - inserted into disturbances", bdAddr)
 			db.commit()
+			stop_counter(bdAddr)
 
 		else:
 			print(bdAddr, "is now disturbed...")
+			start_count(bdAddr)
 
 		db.execute("INSERT INTO event_log VALUES (?, ?, ?)", (datetime.now(), bdAddr, not disturbed, ))
 		print("2.3[handle_single_click] - inserted into event_log", bdAddr)
