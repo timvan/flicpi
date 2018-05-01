@@ -34,7 +34,7 @@ app.config['SECRET_KEY'] = 'secret!'
 
 socketio = SocketIO(app)
 
-db_flicdeamon = sqlite3.connect('../bin/armv6l/flicd.sqlite3.db')
+db_flicdeamon = sqlite3.connect('../bin/armv6l/flicd.sqlite.db')
 db_flicpi =  sqlite3.connect('flicpi.db')
 
 @app.route('/')
@@ -184,7 +184,7 @@ def background_thread():
 		if disturbed:
 			distrubance = datetime.now() - timestamp
 			print(bdAddr + " was disturbed for " + str(distrubance) + '.')
-			db.execute("INSERT INTO disturbances VALUES (?, ?, ?)", (timestamp, bdAddr, distrubance.total_seconds()))
+			db.execute("INSERT INTO disturbances VALUES (?, ?, ?)", (timestamp, bdAddr, 'user1', distrubance.total_seconds()))
 			# print("2.2[handle_single_click] - inserted into disturbances", bdAddr)
 			db.commit()
 
