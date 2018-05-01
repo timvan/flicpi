@@ -94,9 +94,20 @@ def start_new_scan_wizard():
 	eventlet.spawn(new_scan_wizard_thread)
 
 
-# def socket_handle_single_click(bdAddr):
-# 	print('socket_handle_single_click', bdAddr)
-# 	socketio.emit('single click', bdAddr)
+@socketio.on('get connected devices')
+def get_connected_devices():
+	devs = db_flicdeamon.execute("SELECT bdaddr, color FROM buttons").fetchall()
+
+	for i, device in enumerate(devs):
+		row = {
+			'bdAddr': device[0],
+			'color': device[1],
+			'user': i,
+			'slackhandle': "slack handle",
+		}
+		table.append(row)
+
+	socketio.emit('got connected devices', table)
 
 # --------------------- FLIC THREAD ---------------------
 

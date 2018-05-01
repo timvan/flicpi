@@ -30,16 +30,16 @@
         </a>
         <ul>
             <li><a href="#modal_add_flic" class="btn-floating green modal-trigger"><i id="start_add_flic" class="material-icons">add</i></a></li>
-            <li><a href="#modal_users" class="btn-floating blue modal-trigger"><i class="material-icons">mode_edit</i></a></li>
+            <li><a href="#modal_connected_devices" class="btn-floating blue modal-trigger"><i id="open_connected_devices" class="material-icons">mode_edit</i></a></li>
         </ul>
     </div>
 
-    <!-- USERS MODAL -->
+    <!-- CONNECTED DEVICES MODAL -->
 
-    <div id="modal_users" class="modal">
+    <div id="modal_connected_devices" class="modal">
         <div class="modal-content">
-            <div class="title">Users</div>
-            <table id="user_table">
+            <div class="title">Connected Devices</div>
+            <table id="connected_devices_table">
                 <thead>
                     <tr>
                         <th>Flic</th>
@@ -49,7 +49,7 @@
                         <th>Status</th>
                     </tr>
                 </thead>
-                <tbody id="user_tablebody">
+                <tbody id="connected_devices_tablebody">
                 </tbody>
             </table>
         </div>
@@ -124,25 +124,16 @@
     var FAB = document.querySelector('.fixed-action-btn');
     var instance = M.FloatingActionButton.init(FAB, {});
 
-    // FAB.onclick = function(){
-    //     // socket.emit('connect new button');
-    //     console.log('get user table')
-    //     // socket.emit('get user_table');
-    // }
+    // ----- CONNECTED DEVICES MODAL -----
 
-    $user_table = $('#user_table');
-
-
-    // ----- USER MODAL -----
-
-    var user_modal = document.getElementById('modal_users');
-    var instance = M.Modal.init(user_modal, {});
+    var modal_connected_devices = document.getElementById('modal_connected_devices');
+    var instance = M.Modal.init(modal_connected_devices, {});
 
 
     // ----- MODAL -----
 
-    var add_flic_modal = document.getElementById('modal_add_flic');
-    var instance = M.Modal.init(add_flic_modal, {});
+    var modal_add_flic = document.getElementById('modal_add_flic');
+    var instance = M.Modal.init(modal_add_flic, {});
 
 
     // ----- SCOKETS -----
@@ -263,6 +254,20 @@
         console.log(data);
         $modal_add_flic_content.text(data);
     });
+
+    // ----- connected_devices TABLE -----
+
+    open_connected_devices = document.getElementById('open_connected_devices')
+    $connected_devices_table = $('#connected_devices_table');
+
+    open_connected_devices.onclick = function() {
+        socket.emit('get connected devices')
+    }
+
+    socket.on('got connected devices', function(data){
+        console.log(data);
+    })
+
 
 
 
