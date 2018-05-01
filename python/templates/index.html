@@ -245,7 +245,26 @@
         $modal_add_flic_content.text(data);
     });
 
-    // ----- connected_devices TABLE -----
+    socket.on('scan wizard succes', function(bd_addr){
+        console.log("Scan wizard complete with:", bd_addr);
+
+        var str_form = "";
+
+        str_form += '<form id="newUserForm"><div class="input-field">';
+        str_form += ('<label for="form_color">Flic</label><input disabled placeholder="' + String("color") +  '" type="text" id="form_color">');
+        str_form += ('<label for="form_bdAddr">BdAddr</label><input disabled placeholder="' + String(bd_addr) +  '" type="text" id="form_bdAddr">');
+        str_form += '<label for="form_username">Username</label><input type="text" id="form_username">';
+        str_form += '<label for="form_slackhandle">Slack Handle</label><input type="text" id="form_slackhandle">';
+        str_form += '<input type="submit" value="Submit">';
+        str_form += '</div></form>';
+
+        $modal_add_flic_content.html(str_form);
+        socket.emit('scan wizard insert');
+
+    });
+
+
+    // ----- CONNECTED DEVICES TABLE -----
 
     open_connected_devices = document.getElementById('open_connected_devices');
     
@@ -255,6 +274,7 @@
     }
 
     $connected_devices_tablebody = $('#connected_devices_tablebody');
+
     socket.on('got connected devices', function(data){
 
         var str = ''

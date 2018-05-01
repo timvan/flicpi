@@ -25,6 +25,8 @@ class Device():
 
 	# def status_change(self):
 
+
+
 # --------------------- FLASK APP  ---------------------
 
 app = Flask(__name__)
@@ -110,6 +112,25 @@ def get_connected_devices():
 		table.append(row)
 
 	socketio.emit('got connected devices', table)
+
+
+@socketio.on('scan wizard insert')
+def scan_wizard_succes():
+
+	# data = {
+	# username
+	# bdAddr
+	# slackhandle
+	# }
+
+	# username = ""
+	# slackhandle = ""
+
+	# db.execute("INSERT INTO users VALUES (?, ?, ?)", (bdAddr, username, slackhandle))
+	# db.commit()
+	print('scan wizard insert')
+
+
 
 # --------------------- FLIC THREAD ---------------------
 
@@ -236,10 +257,14 @@ def new_scan_wizard_thread():
 		print(msg)
 		socketio.emit('scan wizard', msg)
 
+
+
 		if result == fliclib.ScanWizardResult.WizardSuccess:
 			msg = ("Your button is now ready. The bd addr is " + bd_addr + ".")
 			print(msg)
 			socketio.emit('scan wizard', msg)
+
+			socketio.emit('scan wizard succes', bd_addr)
 
 		wizard_client.close()
 
