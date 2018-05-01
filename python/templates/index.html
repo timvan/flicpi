@@ -250,13 +250,13 @@
 
         var str_form = "";
 
-        str_form += '<form id="newUserForm"><div class="input-field">';
-        str_form += ('<div class="row"><label for="form_color">Flic</label><input disabled placeholder="' + String("color") +  '" type="text" id="form_color"></div>');
-        str_form += ('<div class="row"><label for="form_bdAddr">BdAddr</label><input disabled placeholder="' + String(bd_addr) +  '" type="text" id="form_bdAddr"></div>');
-        str_form += '<div class="row"><label for="form_username">Username</label><input type="text" id="form_username"></div>';
-        str_form += '<div class="row"><label for="form_slackhandle">Slack Handle</label><input type="text" id="form_slackhandle"></div>';
-        str_form += '<div class="row"><input type="submit" value="Submit"></div>';
-        str_form += '</div></form>';
+        str_form += '<form class="col s12" id="newUserForm">';
+        str_form += ('<div class="row"><div class="input-field col s12"><label for="form_color">Flic</label><input disabled placeholder="' + String("color") +  '" type="text" id="form_color"></div></div>');
+        str_form += ('<div class="row"<div class="input-field col s12">><label for="form_bdAddr">BdAddr</label><input disabled placeholder="' + String(bd_addr) +  '" type="text" id="form_bdAddr"></div></div>');
+        str_form += '<div class="row"><div class="input-field col s12"><label for="form_username">Username</label><input type="text" id="form_username"></div></div>';
+        str_form += '<div class="row"><div class="input-field col s12"><label for="form_slackhandle">Slack Handle</label><input type="text" id="form_slackhandle"></div></div>';
+        str_form += '<div class="row"><div class="input-field col s12"><input type="submit" value="Submit"></div></div>';
+        str_form += '</form>';
 
         $modal_add_flic_content.html(str_form);
         socket.emit('scan wizard insert');
