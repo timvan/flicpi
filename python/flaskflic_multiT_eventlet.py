@@ -60,7 +60,7 @@ def update_state_tabe():
 		}
 		table.append(row)
 
-	print(json.dumps(table))
+	# print(json.dumps(table))
 	
 	socketio.emit('update state table', table)
 
@@ -73,7 +73,7 @@ def get_last_time_and_state(bdAddr):
 	"""
 
 	row = db_flicpi.execute("SELECT * FROM event_log WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", (bdAddr, )).fetchone()			
-	print('1[get_last_time_and_state]', row)
+	# print('1[get_last_time_and_state]', row)
 
 	if row is not None:
 		return dateutil.parser.parse(row[0]), bool(row[2])
