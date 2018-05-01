@@ -263,7 +263,7 @@
 
         var stopper = false;
 
-        while (stopper){
+        while (false){
             console.log('Entered the loop')
             $newUserForm.submit(function(e){
                 e.preventDefault();
@@ -274,7 +274,7 @@
                 }
                 console.log('Username submitted', new_user);
                 socket.emit('scan wizard insert', new_user);
-                stopper = true
+                break;
             });
         };
         console.log('exited')
