@@ -144,6 +144,7 @@ def background_thread():
 	# flicpi.db .event_log: (timestamp TEXT, bdAddr TEXT, status INTEGER)
 	# flicpi.db .disturbances: (timestamp TEXT, bdADdr TEXT, disturbance INTEGER)
 	db = sqlite3.connect('flicpi.db')
+	db_deamon = sqlite3.connect('../bin/armv6l/flicd.sqlite.db')
 
 
 	def got_button(bd_addr):
@@ -263,8 +264,8 @@ def new_scan_wizard_thread():
 			msg = ("Your button is now ready. The bd addr is " + bd_addr + ".")
 			print(msg)
 			socketio.emit('scan wizard', msg)
-
-			socketio.emit('scan wizard succes', bd_addr)
+			color = db_deamon.execute("SELECT color FROM buttons WHERE bdAddr = ?", (bd_addr, )).fetchone()
+			socketio.emit('scan wizard succes', bd_addr, color)
 
 		wizard_client.close()
 
