@@ -262,12 +262,12 @@
 
         $newUserForm.submit(function(e){
             e.preventDefault();
-            new_user = {
+            var new_user = {
                 'bdAddr': $form_bdAddr.val(),
                 'username': $form_username.val(),
                 'slackhandle': $form_slackhandle.val(),
             }
-            console.log('Username submitted');
+            console.log('Username submitted', new_user);
             socket.emit('scan wizard insert', new_user);
         });
 
