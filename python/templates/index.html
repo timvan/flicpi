@@ -96,16 +96,6 @@
 						</tr>
 					</thead>
 					<tbody id="state_tablebody">
-		<!-- 				{% for device in devices %}
-							<tr>
-								<th>{{ device.bdAddr }}</th>
-								<th>{{ device.user }}</th>
-								<th>{{ device.colour }}</th>
-								<th>{{ device.status }}</th>
-								<th></th>
-								<th></th>
-							</tr>
-						{% endfor %} -->
 					</tbody>
 				</table>
 			</div>
@@ -259,20 +249,30 @@
 
     open_connected_devices = document.getElementById('open_connected_devices');
     
-    $connected_devices_table = $('#connected_devices_table');
-
     open_connected_devices.onclick = function() {
         console.log('Getting connected devices..')
         socket.emit('get connected devices')
     }
 
+    $connected_devices_tablebody = $('#connected_devices_tablebody');
     socket.on('got connected devices', function(data){
-        console.log(data);
-    })
 
+        var str = ''
+        for (var i = 0; i < data.length; i++){
+            str += ('<tr>')
+            str += ('<td>' + String(data[i]['color']) + '</td>');
+            str += ('<td>' + String(data[i]['bdAddr']) + '</td>');
+            str += ('<td>' + String(data[i]['user']) + '</td>');
+            str += ('<td>' + String(data[i]['slackhandle']) + '</td>');
+            str += ('<td>' + String(data[i]['status']) + '</td>');
+            str += ('</tr>')
 
+        };
+        // console.log(str);
+        $connected_devices_tablebody.children().remove();
+        $connected_devices_tablebody.append(str);
 
-
+    });
 
 </script>
 
