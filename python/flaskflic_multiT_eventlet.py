@@ -32,7 +32,7 @@ app.config['SECRET_KEY'] = 'secret!'
 
 socketio = SocketIO(app)
 
-db_flicdeamon = sqlite3.connect('../bin/armv6l/flicd.sqlite.db')
+db_flicdeamon = sqlite3.connect('../bin/armv6l/flicd.sqlite3.db')
 db_flicpi =  sqlite3.connect('flicpi.db')
 
 @app.route('/')
