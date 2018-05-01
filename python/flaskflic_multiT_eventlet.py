@@ -88,8 +88,8 @@ def get_daily_total(bdAddr):
 
 
 
-@socketio.on('connect new button')
-def connect_new_button():
+@socketio.on('start new scan wizard')
+def start_new_scan_wizard():
 	print('connect new button, spanning new thread..')
 	eventlet.spawn(new_scan_wizard_thread)
 
@@ -199,6 +199,7 @@ def background_thread():
 def new_scan_wizard_thread():
 
 	print("New scan wizard thread..")
+	socketio.emit('scan wizard', "New scan wizard thread..")
 
 	wizard_client = fliclib.FlicClient("localhost")
 
