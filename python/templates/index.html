@@ -145,24 +145,6 @@
     var instance = M.Modal.init(add_flic_modal, {});
 
 
-    // ----- NEW SCAN WIZARD -----
-
-    modal_add_flic_content = document.getElementById('modal_add_flic_content')
-    start_add_flic = document.getElementById('start_add_flic')
-
-    start_add_flic.onclick = function() {
-        console.log("Starting scan wizard..");
-        $modal_add_flic_content.text("Starting scan wizard..");
-        socket.emit('start new scan wizard');
-    };
-
-    socket.on('scan wizard', function(data){
-        console.log(data);
-        $modal_add_flic_content.text(data);
-    });
-
-
-
     // ----- SCOKETS -----
 
     var socket = io.connect('http://' + document.domain + ':' + location.port);
@@ -266,6 +248,21 @@
     }
 
 
+    // ----- NEW SCAN WIZARD -----
+
+    modal_add_flic_content = document.getElementById('modal_add_flic_content')
+    start_add_flic = document.getElementById('start_add_flic')
+
+    start_add_flic.onclick = function() {
+        console.log("Starting scan wizard..");
+        $modal_add_flic_content.text("Starting scan wizard..");
+        socket.emit('start new scan wizard');
+    };
+
+    socket.on('scan wizard', function(data){
+        console.log(data);
+        $modal_add_flic_content.text(data);
+    });
 
 
 

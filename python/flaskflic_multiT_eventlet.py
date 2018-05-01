@@ -147,7 +147,6 @@ def background_thread():
 		timestamp, disturbed = get_last(bdAddr)
 
 		
-
 		if disturbed:
 			distrubance = datetime.now() - timestamp
 			print(bdAddr + " was disturbed for " + str(distrubance) + '.')
