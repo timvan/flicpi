@@ -29,7 +29,7 @@
             <i class="large material-icons">menu</i>
         </a>
         <ul>
-            <li><a id="start_add_flic" href="#modal_add_flic" class="btn-floating green modal-trigger"><i class="material-icons">add</i></a></li>
+            <li><a href="#modal_add_flic" class="btn-floating green modal-trigger"><i id="start_add_flic" class="material-icons">add</i></a></li>
             <li><a href="#modal_users" class="btn-floating blue modal-trigger"><i class="material-icons">mode_edit</i></a></li>
         </ul>
     </div>
@@ -252,6 +252,7 @@
     $start_add_flic = $('start_add_flic')
 
     $start_add_flic.onclick = function() {
+        console.log("Starting scan wizard..")
         $modal_add_flic_content.text("Starting scan wizard..");
         socket.emit('start new scan wizard');
     }

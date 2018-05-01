@@ -90,7 +90,7 @@ def get_daily_total(bdAddr):
 
 @socketio.on('start new scan wizard')
 def start_new_scan_wizard():
-	print('connect new button, spanning new thread..')
+	print('start new scan wizard, spanning new thread..')
 	eventlet.spawn(new_scan_wizard_thread)
 
 
