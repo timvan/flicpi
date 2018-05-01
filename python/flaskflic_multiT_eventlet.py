@@ -97,6 +97,7 @@ def start_new_scan_wizard():
 @socketio.on('get connected devices')
 def get_connected_devices():
 	print('getting connected devices..')
+	table = []
 	devs = db_flicdeamon.execute("SELECT bdaddr, color FROM buttons").fetchall()
 
 	for i, device in enumerate(devs):
