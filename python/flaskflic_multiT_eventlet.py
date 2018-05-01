@@ -193,28 +193,41 @@ def background_thread():
 	client.on_new_verified_button = got_button
 	client.handle_events()
 
-
+# --------------------- NEW SCAN WIZARD THREAD ---------------------
 
 def new_scan_wizard_thread():
 
-	print("New scan wizard thread..")
-	socketio.emit('scan wizard', "New scan wizard thread..")
+	msg = ("New scan wizard thread..")
+	print(msg)
+	socketio.emit('scan wizard', msg)
 
 	wizard_client = fliclib.FlicClient("localhost")
 
 	def on_found_private_button(scan_wizard):
-		print("Found a private button. Please hold it down for 7 seconds to make it public.")
+		msg = ("Found a private button. Please hold it down for 7 seconds to make it public.")
+		print(msg)
+		socketio.emit('scan wizard', msg)
 
 	def on_found_public_button(scan_wizard, bd_addr, name):
-		print("Found public button " + bd_addr + " (" + name + "), now connecting...")
+		msg = ("Found public button " + bd_addr + " (" + name + "), now connecting...")
+		print(msg)
+		socketio.emit('scan wizard', msg)
 
 	def on_button_connected(scan_wizard, bd_addr, name):
-		print("The button was connected, now verifying...")
+		msg = ("The button was connected, now verifying...")
+		print(msg)
+		socketio.emit('scan wizard', msg)
 
 	def on_completed(scan_wizard, result, bd_addr, name):
-		print("Scan wizard completed with result " + str(result) + ".")
+		msg = ("Scan wizard completed with result " + str(result) + ".")
+		print(msg)
+		socketio.emit('scan wizard', msg)
+
 		if result == fliclib.ScanWizardResult.WizardSuccess:
-			print("Your button is now ready. The bd addr is " + bd_addr + ".")
+			msg = ("Your button is now ready. The bd addr is " + bd_addr + ".")
+			print(msg)
+			socketio.emit('scan wizard', msg)
+
 		wizard_client.close()
 
 	wizard = fliclib.ScanWizard()
@@ -224,7 +237,9 @@ def new_scan_wizard_thread():
 	wizard.on_completed = on_completed
 	wizard_client.add_scan_wizard(wizard)
 
-	print("Welcome to Scan Wizard. Please press your Flic button.")
+	msg = ("Welcome to Scan Wizard. Please press your Flic button.")
+	print(msg)
+	socketio.emit('scan wizard', msg)
 
 	wizard_client.handle_events()
 
