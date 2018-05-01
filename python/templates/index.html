@@ -66,10 +66,6 @@
             <!-- <div class="title">Connect to new button</div> -->
             <div id="modal_add_flic_content"></div>
         </div>
-
-        <div class="modal-footer">
-            <a href="" class="modal-action modal-close waves-effect waves-red btn-flat">Close</a>
-        </div>
     </div>
 
 
@@ -250,21 +246,19 @@
 
         var str_form = "";
 
-        str_form += '<form class="col s12" id="newUserForm">';
+        str_form += '<div class="row"><form class="col s12" id="newUserForm">';
         str_form += ('<div class="row"><div class="input-field col s12"><input disabled placeholder="' + String(data['color']) +  '" type="text" id="form_color"></div></div>');
         str_form += ('<div class="row"<div class="input-field col s12"><input disabled placeholder="' + String(data['bdAddr']) +  '" type="text" id="form_bdAddr"></div></div>');
         str_form += '<div class="row"><div class="input-field col s12"><label for="form_username">Username</label><input type="text" id="form_username"></div></div>';
         str_form += '<div class="row"><div class="input-field col s12"><label for="form_slackhandle">Slack Handle</label><input type="text" id="form_slackhandle"></div></div>';
-        str_form += '<div class="row"><div class="input-field col s12"><input type="submit" value="Submit"></div></div>';
-        str_form += '</form>';
+        str_form += '<div class="row"><div class="input-field col s12"><input type="submit" value="Submit" class="right"></div></div>';
+        str_form += '</form></div>';
 
         $modal_add_flic_content.html(str_form);
 
         $form_bdAddr = $('#form_bdAddr');
         $form_username = $('#form_username');
         $form_slackhandle = $('#form_slackhandle');
-
-                socket.emit('scan wizard insert');
 
         $newUserForm.submit(function(e){
             e.preventDefault();
