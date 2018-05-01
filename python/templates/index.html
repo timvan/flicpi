@@ -241,6 +241,8 @@
         $modal_add_flic_content.text(data);
     });
 
+    $newUserForm = $();
+
     socket.on('scan wizard succes', function(data){
         console.log("Scan wizard complete with:", data['bdAddr'], data['color']);
 
@@ -261,25 +263,22 @@
         $form_username = $('#form_username');
         $form_slackhandle = $('#form_slackhandle');
 
-        var stopper = false;
-
-        while (stopper){
-            console.log('Entered the loop')
-            $newUserForm.submit(function(e){
-                e.preventDefault();
-                var new_user = {
-                    'bdAddr': $form_bdAddr.val(),
-                    'username': $form_username.val(),
-                    'slackhandle': $form_slackhandle.val(),
-                }
-                console.log('Username submitted', new_user);
-                socket.emit('scan wizard insert', new_user);
-                stopper = true;
-            });
         };
         console.log('exited')
     });
 
+
+
+    $newUserForm.submit(function(e){
+        e.preventDefault();
+        var new_user = {
+            'bdAddr': $form_bdAddr.val(),
+            'username': $form_username.val(),
+            'slackhandle': $form_slackhandle.val(),
+        }
+        console.log('Username submitted', new_user);
+        socket.emit('scan wizard insert', new_user);
+    });
 
 
 
