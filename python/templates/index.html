@@ -73,8 +73,11 @@
 <script type="text/javascript" charset="utf-8">
 
     var FAB = document.querySelector('.fixed-action-btn');
-    var instance = M.FloatingActionButton.init(FAB);
+    var instance = M.FloatingActionButton.init(FAB, {});
 
+    FAB.onclick = function(){
+        socket.emit('connect new button');
+    }
 
     var socket = io.connect('http://' + document.domain + ':' + location.port);
 
