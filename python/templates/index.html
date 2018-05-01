@@ -261,16 +261,21 @@
         $form_username = $('#form_username');
         $form_slackhandle = $('#form_slackhandle');
 
-        $newUserForm.submit(function(e){
-            e.preventDefault();
-            var new_user = {
-                'bdAddr': $form_bdAddr.val(),
-                'username': $form_username.val(),
-                'slackhandle': $form_slackhandle.val(),
-            }
-            console.log('Username submitted', new_user);
-            socket.emit('scan wizard insert', new_user);
-        });
+        var stopper = false;
+
+        while (stopper){
+            $newUserForm.submit(function(e){
+                e.preventDefault();
+                var new_user = {
+                    'bdAddr': $form_bdAddr.val(),
+                    'username': $form_username.val(),
+                    'slackhandle': $form_slackhandle.val(),
+                }
+                console.log('Username submitted', new_user);
+                socket.emit('scan wizard insert', new_user);
+                stopper = true
+            });
+        };
         console.log('exited')
     });
 
