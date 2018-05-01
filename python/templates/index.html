@@ -42,11 +42,11 @@
 					<thead>
 						<tr>
 							<th>bdAddr</th>
-							<th class="right">User</th>
+							<th class="">User</th>
 							<th>Colour</th>
 							<th>Status</th>
-							<th class="right">Current Disruption</th>
-							<th class="right">Daily Total</th>
+							<th class="">Current Disruption</th>
+							<th class="">Daily Total</th>
 						</tr>
 					</thead>
 					<tbody id="state_tablebody">
@@ -106,15 +106,15 @@
     	var str = ''
     	for (var i = 0; i < data.length; i++){
     		str += ('<tr bdAddr="' + data[i]['bdAddr'] + '">')
-    		str += ('<td>' + String(data[i]['bdAddr']) + '</td><td class="right">' + String(data[i]['user']) + '</td><td>' + String(data[i]['color']) + '</td><td>' + String(data[i]['state']) + '</td>')
+    		str += ('<td>' + String(data[i]['bdAddr']) + '</td><td class="">' + String(data[i]['user']) + '</td><td>' + String(data[i]['color']) + '</td><td>' + String(data[i]['state']) + '</td>')
 
     		if(String(data[i]['state']) == 'true'){
-    			str += ('<td class="current_disruption active right" disruption_start="' + String(data[i]['disruption_start']) + '"></td>');
+    			str += ('<td class="current_disruption active" disruption_start="' + String(data[i]['disruption_start']) + '"></td>');
     		}else{
-    			str += ('<td class="current_disruption right"></td>');
+    			str += ('<td class="current_disruption"></td>');
     		}
     	
-    		str += ('<td class="right">' + secs_to_string(data[i]['daily_total']) + '</td>')
+    		str += ('<td class="">' + secs_to_string(data[i]['daily_total']) + '</td>')
     		str += ('</tr>')
 
     	};
