@@ -256,6 +256,11 @@
 
         $modal_add_flic_content.html(str_form);
 
+        userForm();
+
+    });
+
+    function userForm() {
         $newUserForm = $('#newUserForm');
         $form_bdAddr = $('#form_bdAddr');
         $form_username = $('#form_username');
@@ -271,10 +276,7 @@
             console.log('Username submitted', new_user);
             socket.emit('scan wizard insert', new_user);
         });
-
-
-
-    });
+    };
 
 
 
