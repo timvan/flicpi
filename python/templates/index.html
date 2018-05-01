@@ -257,10 +257,12 @@
 
     // ----- connected_devices TABLE -----
 
-    open_connected_devices = document.getElementById('open_connected_devices')
+    open_connected_devices = document.getElementById('open_connected_devices');
+    
     $connected_devices_table = $('#connected_devices_table');
 
     open_connected_devices.onclick = function() {
+        console.log('Getting connected devices..')
         socket.emit('get connected devices')
     }
 
