@@ -259,24 +259,9 @@
         $modal_add_flic_content.html(str_form);
 
         $newUserForm = $('#newUserForm');
+        console.log(str);
         update_newUserForm();
         console.log('exited');
-    });
-
-
-    $newUserForm.submit(function(e){
-        console.lof('this one')
-        $form_bdAddr = $('#form_bdAddr');
-        $form_username = $('#form_username');
-        $form_slackhandle = $('#form_slackhandle');
-        e.preventDefault();
-        var new_user = {
-            'bdAddr': $form_bdAddr.val(),
-            'username': $form_username.val(),
-            'slackhandle': $form_slackhandle.val(),
-        }
-        console.log('Username submitted', new_user);
-        socket.emit('scan wizard insert', new_user);
     });
 
 
