@@ -4,7 +4,7 @@
 
 	<!-- Compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
-
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
     <script src="https://code.jquery.com/jquery-latest.min.js"></script>
@@ -22,6 +22,12 @@
 		</div>
 	</nav>
 
+    <div class="fixed-action-btn">
+        <a href="" class="btn-floating btn-large red">
+            <i class="large material-icons">add</i>
+        </a>
+    </div>
+
 
 	<div class="container">
 
@@ -36,11 +42,11 @@
 					<thead>
 						<tr>
 							<th>bdAddr</th>
-							<th>user</th>
+							<th class="right">User</th>
 							<th>Colour</th>
 							<th>Status</th>
-							<th>Disruption</th>
-							<th>Daily Total</th>
+							<th class="right">Current Disruption</th>
+							<th class="right">Daily Total</th>
 						</tr>
 					</thead>
 					<tbody id="state_tablebody">
@@ -63,7 +69,13 @@
 
 
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+
 <script type="text/javascript" charset="utf-8">
+
+    var FAB = document.querySelector('.fixed-action-btn');
+    var instance = M.FloatingActionButton.init(FAB);
+
+
     var socket = io.connect('http://' + document.domain + ':' + location.port);
 
     var $socket_status = $('#socket_status')
@@ -91,15 +103,15 @@
     	var str = ''
     	for (var i = 0; i < data.length; i++){
     		str += ('<tr bdAddr="' + data[i]['bdAddr'] + '">')
-    		str += ('<td>' + String(data[i]['bdAddr']) + '</td><td>' + String(data[i]['user']) + '</td><td>' + String(data[i]['color']) + '</td><td>' + String(data[i]['state']) + '</td>')
+    		str += ('<td>' + String(data[i]['bdAddr']) + '</td><td class="right">' + String(data[i]['user']) + '</td><td>' + String(data[i]['color']) + '</td><td>' + String(data[i]['state']) + '</td>')
 
     		if(String(data[i]['state']) == 'true'){
-    			str += ('<td class="current_disruption active" disruption_start="' + String(data[i]['disruption_start']) + '"></td>');
+    			str += ('<td class="current_disruption active right" disruption_start="' + String(data[i]['disruption_start']) + '"></td>');
     		}else{
-    			str += ('<td class="current_disruption"></td>');
+    			str += ('<td class="current_disruption right"></td>');
     		}
     	
-    		str += ('<td>' + secs_to_string(data[i]['daily_total']) + '</td>')
+    		str += ('<td class="right">' + secs_to_string(data[i]['daily_total']) + '</td>')
     		str += ('</tr>')
 
     	};
@@ -135,6 +147,10 @@
     	// console.log(millis);
 
     	secs = Math.floor(secs);
+
+        if (secs < 60){
+            return (String(secs) + "s")
+        }
 
     	var days = Math.floor(secs / (60 * 60 * 8));
     	var hours = Math.floor(secs / (60 * 60)) % 8;

@@ -40,26 +40,6 @@ def index():
 	return render_template('index.html')
 
 
-@socketio.on('connect new button')
-def connect_new_button():
-	pass
-
-def get_last_time_and_state(bdAddr):
-	""" 
-	Get the last entry of this bdAddr in event_log. 
-	Return the status and the time of log.
-	If does not exist return False and datetime.now().
-	"""
-
-	row = db_flicpi.execute("SELECT * FROM event_log WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", (bdAddr, )).fetchone()			
-	print('1[get_last_time_and_state]', row)
-
-	if row is not None:
-		return dateutil.parser.parse(row[0]), bool(row[2])
-
-	return datetime.now(), False
-
-
 @socketio.on('page loaded')
 def update_state_tabe():
 
@@ -85,10 +65,33 @@ def update_state_tabe():
 	socketio.emit('update state table', table)
 
 
+def get_last_time_and_state(bdAddr):
+	""" 
+	Get the last entry of this bdAddr in event_log. 
+	Return the status and the time of log.
+	If does not exist return False and datetime.now().
+	"""
+
+	row = db_flicpi.execute("SELECT * FROM event_log WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", (bdAddr, )).fetchone()			
+	print('1[get_last_time_and_state]', row)
+
+	if row is not None:
+		return dateutil.parser.parse(row[0]), bool(row[2])
+
+	return datetime.now(), False
+
+
 def get_daily_total(bdAddr):
 
 	total = db_flicpi.execute("SELECT SUM(disturbance) FROM disturbances WHERE bdAddr=? AND timestamp > datetime('now', 'localtime', 'start of day')", (bdAddr,)).fetchone()
 	return total[0]
+
+
+
+@socketio.on('connect new button')
+def connect_new_button():
+	eventlet.spawn(new_scan_wizard_thread)
+
 
 # def socket_handle_single_click(bdAddr):
 # 	print('socket_handle_single_click', bdAddr)
@@ -190,6 +193,37 @@ def background_thread():
 	client.on_new_verified_button = got_button
 	client.handle_events()
 
+
+
+def new_scan_wizard_thread():
+
+	print("New scan wizard thread..")
+
+	wizard_client = fliclib.FlicClient("localhost")
+
+	def on_found_private_button(scan_wizard):
+		print("Found a private button. Please hold it down for 7 seconds to make it public.")
+
+	def on_found_public_button(scan_wizard, bd_addr, name):
+		print("Found public button " + bd_addr + " (" + name + "), now connecting...")
+
+	def on_button_connected(scan_wizard, bd_addr, name):
+		print("The button was connected, now verifying...")
+
+	def on_completed(scan_wizard, result, bd_addr, name):
+		print("Scan wizard completed with result " + str(result) + ".")
+		if result == fliclib.ScanWizardResult.WizardSuccess:
+			print("Your button is now ready. The bd addr is " + bd_addr + ".")
+		wizard_client.close()
+
+	wizard = fliclib.ScanWizard()
+	wizard.on_found_private_button = on_found_private_button
+	wizard.on_found_public_button = on_found_public_button
+	wizard.on_button_connected = on_button_connected
+	wizard.on_completed = on_completed
+	wizard_client.add_scan_wizard(wizard)
+
+	print("Welcome to Scan Wizard. Please press your Flic button.")
 
 
 # --------------------- RUN TIME ---------------------
