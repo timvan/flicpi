@@ -114,8 +114,8 @@ def get_connected_devices():
 	socketio.emit('got connected devices', table)
 
 
-@socketio.on('scan wizard insert', new_user)
-def scan_wizard_succes():
+@socketio.on('scan wizard insert')
+def scan_wizard_succes(new_user):
 
 
 	# db.execute("INSERT INTO users VALUES (?, ?, ?)", (bdAddr, username, slackhandle))
