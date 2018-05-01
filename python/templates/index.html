@@ -251,17 +251,37 @@
         var str_form = "";
 
         str_form += '<form class="col s12" id="newUserForm">';
-        str_form += ('<div class="row"><div class="input-field col s12"><label for="form_color">Flic</label><input disabled placeholder="' + String(data['color']) +  '" type="text" id="form_color"></div></div>');
-        str_form += ('<div class="row"<div class="input-field col s12"><label for="form_bdAddr">BdAddr</label><input disabled placeholder="' + String(data['bdAddr']) +  '" type="text" id="form_bdAddr"></div></div>');
+        str_form += ('<div class="row"><div class="input-field col s12"><input disabled placeholder="' + String(data['color']) +  '" type="text" id="form_color"></div></div>');
+        str_form += ('<div class="row"<div class="input-field col s12"><input disabled placeholder="' + String(data['bdAddr']) +  '" type="text" id="form_bdAddr"></div></div>');
         str_form += '<div class="row"><div class="input-field col s12"><label for="form_username">Username</label><input type="text" id="form_username"></div></div>';
         str_form += '<div class="row"><div class="input-field col s12"><label for="form_slackhandle">Slack Handle</label><input type="text" id="form_slackhandle"></div></div>';
         str_form += '<div class="row"><div class="input-field col s12"><input type="submit" value="Submit"></div></div>';
         str_form += '</form>';
 
         $modal_add_flic_content.html(str_form);
-        socket.emit('scan wizard insert');
+
+        $form_bdAddr = $('#form_bdAddr');
+        $form_username = $('#form_username');
+        $form_slackhandle = $('#form_slackhandle');
+
+                socket.emit('scan wizard insert');
+
+        $newUserForm.submit(function(e){
+            e.preventDefault();
+            new_user = {
+                'bdAddr': $form_bdAddr.val(),
+                'username': $form_username.val(),
+                'slackhandle': $form_slackhandle.val(),
+            }
+            console.log('Username submitted');
+            socket.emit('scan wizard insert', new_user);
+        });
+
+
 
     });
+
+
 
 
     // ----- CONNECTED DEVICES TABLE -----
