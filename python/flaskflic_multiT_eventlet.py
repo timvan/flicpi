@@ -266,7 +266,12 @@ def new_scan_wizard_thread():
 			print(msg)
 			socketio.emit('scan wizard', msg)
 			color = db_deamon.execute("SELECT color FROM buttons WHERE bdAddr = ?", (bd_addr, )).fetchone()
-			socketio.emit('scan wizard succes', bd_addr, color)
+			
+			data = {
+			 'bdAddr': bd_addr,
+			 'color': color
+			}
+			socketio.emit('scan wizard succes', data)
 
 		wizard_client.close()
 
