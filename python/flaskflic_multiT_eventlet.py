@@ -144,7 +144,6 @@ def background_thread():
 	# flicpi.db .event_log: (timestamp TEXT, bdAddr TEXT, status INTEGER)
 	# flicpi.db .disturbances: (timestamp TEXT, bdADdr TEXT, disturbance INTEGER)
 	db = sqlite3.connect('flicpi.db')
-	db_deamon = sqlite3.connect('../bin/armv6l/flicd.sqlite.db')
 
 
 	def got_button(bd_addr):
@@ -237,6 +236,8 @@ def new_scan_wizard_thread():
 	socketio.emit('scan wizard', msg)
 
 	wizard_client = fliclib.FlicClient("localhost")
+
+	db_deamon = sqlite3.connect('../bin/armv6l/flicd.sqlite.db')
 
 	def on_found_private_button(scan_wizard):
 		msg = ("Found a private button. Please hold it down for 7 seconds to make it public.")
