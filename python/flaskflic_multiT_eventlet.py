@@ -226,6 +226,8 @@ def new_scan_wizard_thread():
 
 	print("Welcome to Scan Wizard. Please press your Flic button.")
 
+	wizard_client.handle_events()
+
 
 # --------------------- RUN TIME ---------------------
 
