@@ -16,18 +16,48 @@
 	<nav>
 		<div class="nav-wrapper teal lighten-1">
 			<div style="padding-left: 2%; padding-right: 2%;">
-				<a href="#" class="brand-logo">AgriDigital Flics</a>
+				<a href="#" class="brand-logo"><img src="../static/img/agridigital_large.svg" height="50" align="top" style="padding-top: 10px; padding-right: 10px;"><img src="../static/img/flic_large.png" height="50" align="top" style="padding-top: 10px; padding-right: 10px;"><img src="../static/img/Raspberry_Pi_Logo.svg" height="50" align="top" style="padding-top: 12px"></a></a>
 				<div class="right">Socket Status: <span id="socket_status">Disconnected</span></div>
 			</div>
 		</div>
 	</nav>
 
+    <!-- FLOATING ACTION BUTTON -->
+
     <div class="fixed-action-btn">
-        <a href="" class="btn-floating btn-large red">
+        <a href="#modal1" class="btn-floating btn-large red">
             <i class="large material-icons">add</i>
         </a>
     </div>
 
+    <!-- USERS MODAL -->
+
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <h4>Users</h4>
+            <table id="user_table">
+                <thead>
+                    <tr>
+                        <th>Flic</th>
+                        <th>bdAddr</th>
+                        <th class="">User</th>
+                        <th>Slack Hanle</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="user_tablebody">
+                </tbody>
+            </table>
+        </div>
+
+        <div class="modal-footer">
+            <a href="#" class="waves-effect waves-light btn left">Add New Flic</a>
+            <a href="#!" class="modal-action modal-close waves-effect waves-red btn-flat">Close</a>
+        </div>
+    </div>
+
+
+    <!-- STATUS TABLE -->
 
 	<div class="container">
 
@@ -72,12 +102,22 @@
 
 <script type="text/javascript" charset="utf-8">
 
+
+    // ----- FAB -----
     var FAB = document.querySelector('.fixed-action-btn');
     var instance = M.FloatingActionButton.init(FAB, {});
 
     FAB.onclick = function(){
-        socket.emit('connect new button');
+        // socket.emit('connect new button');
     }
+
+
+    // ----- USER MODAL -----
+
+    var user_modal = document.querySelector('.modal');
+    var instance = M.Modal.init(user_modal, {});
+
+    // ----- SCOKETS -----
 
     var socket = io.connect('http://' + document.domain + ':' + location.port);
 
