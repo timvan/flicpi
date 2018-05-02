@@ -47,7 +47,10 @@ def update_state_tabe():
 
 	table = []
 
-	devs = db_flicdeamon.execute("SELECT bdaddr, color FROM buttons").fetchall()
+	c = db_flicdeamon.cursor()
+	c.execute("SELECT bdaddr, color FROM buttons")
+	devs = c.fetchall()
+	c.close()
 
 	for i, device in enumerate(devs):
 		timestamp, state = get_last_time_and_state(device[0])
@@ -74,7 +77,10 @@ def get_last_time_and_state(bdAddr):
 	If does not exist return False and datetime.now().
 	"""
 
-	row = db_flicpi.execute("SELECT * FROM event_log WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", (bdAddr, )).fetchone()			
+	c = db_flicpi.cursor()
+	c.execute("SELECT * FROM event_log WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", (bdAddr, ))
+	row = c.fetchone()			
+	c.close()
 	# print('1[get_last_time_and_state]', row)
 
 	if row is not None:
@@ -85,7 +91,10 @@ def get_last_time_and_state(bdAddr):
 
 def get_daily_total(bdAddr):
 
-	total = db_flicpi.execute("SELECT SUM(disturbance) FROM disturbances WHERE bdAddr=? AND timestamp > datetime('now', 'localtime', 'start of day')", (bdAddr,)).fetchone()
+	c = db_flicpi.cursor()
+	c.execute("SELECT SUM(disturbance) FROM disturbances WHERE bdAddr=? AND timestamp > datetime('now', 'localtime', 'start of day')", (bdAddr,))
+	total = c.fetchone()
+	c.close()
 	return total[0]
 
 
@@ -100,7 +109,11 @@ def start_new_scan_wizard():
 def get_connected_devices():
 	print('getting connected devices..')
 	table = []
-	devs = db_flicdeamon.execute("SELECT bdaddr, color FROM buttons").fetchall()
+
+	c = db_flicdeamon.cursor()
+	c.execute("SELECT bdaddr, color FROM buttons")
+	devs = c.fetchall()
+	c.close()
 
 	for i, device in enumerate(devs):
 		row = {
@@ -121,9 +134,12 @@ def scan_wizard_succes(new_user):
 	# db.execute("INSERT INTO users VALUES (?, ?, ?)", (bdAddr, username, slackhandle))
 	# db.commit()
 	print('scan wizard insert', new_user)
-	db.execute("UPDATE users SET user = ?, slackhandle = ? WHERE bdAddr = ?", (new_user['username'], new_user['slackhandle'], new_user['bdAddr']))
-	db.commit()
-	
+
+	c = db_flicpi.cursor()
+	c.execute("UPDATE users SET user = ?, slackhandle = ? WHERE bdAddr = ?", (new_user['username'], new_user['slackhandle'], new_user['bdAddr']))
+	c.commit()
+	c.close()
+
 
 
 
@@ -232,8 +248,8 @@ def new_scan_wizard_thread():
 
 	wizard_client = fliclib.FlicClient("localhost")
 
-	db_sw_deamon = sqlite3.connect('../bin/armv6l/flicd.sqlite.db')
-	db_sw_flicpi =  sqlite3.connect('flicpi.db')
+	# db_sw_deamon = sqlite3.connect('../bin/armv6l/flicd.sqlite.db')
+	# db_sw_flicpi =  sqlite3.connect('flicpi.db')
 
 	def on_found_private_button(scan_wizard):
 		msg = ("Found a private button. Please hold it down for 7 seconds to make it public.")
@@ -259,13 +275,19 @@ def new_scan_wizard_thread():
 
 		if result == fliclib.ScanWizardResult.WizardSuccess:
 			
-			db_sw_flicpi.execute("INSERT INTO users VALUES (?, ?, ?)", (bd_addr, None, None))
-			dw_sw_flicpi.commit()
+			c = db_flicpi.cursor()
+			c.execute("INSERT INTO users VALUES (?, ?, ?)", (bd_addr, None, None))
+			c.commit()
+			c.close()
 
 			msg = ("Your button is now ready. The bd addr is " + bd_addr + ".")
 			print(msg)
 			socketio.emit('scan wizard', msg)
-			color = db_sw_deamon.execute("SELECT color FROM buttons WHERE bdAddr = ?", (bd_addr, )).fetchone()
+			
+			c = db_flicdeamon.cursor()
+			c.execute("SELECT color FROM buttons WHERE bdAddr = ?", (bd_addr, ))
+			color = c.fetchone()
+			c.close()
 			
 			data = {
 			 'bdAddr': bd_addr,
