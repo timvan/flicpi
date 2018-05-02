@@ -58,7 +58,7 @@ def update_state_tabe():
 		row = {
 			'bdAddr': device[0],
 			'color': device[1],
-			'user': db_flicpi.execute("SELECT user FROM users WHERE bdAddr = ? ORDER BY ROWID DESC LIMIT 1", (device[0],)),
+			'user': db_flicpi.execute("SELECT user FROM users WHERE bdAddr = ? ORDER BY ROWID DESC LIMIT 1", (device[0],)).fetchone(),
 			'state': state,
 			'disruption_start': timestamp.ctime() if state else None,
 			'daily_total': daily_total if daily_total else 0,
@@ -76,9 +76,7 @@ def get_last_time_and_state(bdAddr):
 	Return the status and the time of log.
 	If does not exist return False and datetime.now().
 	"""
-
-	c = db_flicpi.cursor()
-	row = c.execute("SELECT * FROM event_log WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", (bdAddr, ))
+	row = db_flicpi.execute("SELECT * FROM event_log WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", (bdAddr, )).fetchone()
 	# print('1[get_last_time_and_state]', row)
 
 	if row is not None:
@@ -115,8 +113,8 @@ def get_connected_devices():
 		row = {
 			'bdAddr': device[0],
 			'color': device[1],
-			'user': db_flicpi.execute("SELECT user FROM users WHERE bdAddr = ? ORDER BY ROWID DESC LIMIT 1", (device[0],)),
-			'slackhandle': db_flicpi.execute("SELECT slackhandle FROM users WHERE bdAddr = ? ORDER BY ROWID DESC LIMIT 1", (device[0],)),
+			'user': db_flicpi.execute("SELECT user FROM users WHERE bdAddr = ? ORDER BY ROWID DESC LIMIT 1", (device[0],)).fetchone(),
+			'slackhandle': db_flicpi.execute("SELECT slackhandle FROM users WHERE bdAddr = ? ORDER BY ROWID DESC LIMIT 1", (device[0],)).fetchone(),
 		}
 		table.append(row)
 
@@ -130,7 +128,8 @@ def scan_wizard_succes(new_user):
 	# db.execute("INSERT INTO users VALUES (?, ?, ?)", (bdAddr, username, slackhandle))
 	# db.commit()
 	print('scan wizard insert', new_user)
-	rowid = ("SELECT ROWID FROM users WHERE bdAddr = ? ORDER BY ROWID DESC LIMIT 1", (new_user['bdAddr'], ))
+	rowid = ("SELECT ROWID FROM users WHERE bdAddr = ? ORDER BY ROWID DESC LIMIT 1", (new_user['bdAddr'], )).fetchone()
+
 	c = db_flicpi.cursor()
 	c.execute("UPDATE users SET user = ?, slackhandle = ? WHERE ROWID = ?", (new_user['username'], new_user['slackhandle'], rowid[0]))
 	db_flicpi.commit()
@@ -191,7 +190,7 @@ def background_thread():
 		if disturbed:
 			distrubance = datetime.now() - timestamp
 			print(bdAddr + " was disturbed for " + str(distrubance) + '.')
-			user = db.execute("SELECT user FROM users WHERE bdAddr = ? ORDER BY ROWID DESC LIMIT 1", (bdAddr,))[0]
+			user = db.execute("SELECT user FROM users WHERE bdAddr = ? ORDER BY ROWID DESC LIMIT 1", (bdAddr,)).fetchone()[0]
 			print('user:', user)
 			db.execute("INSERT INTO disturbances VALUES (?, ?, ?, ?)", (timestamp, bdAddr, user, distrubance.total_seconds()))
 			# print("2.2[handle_single_click] - inserted into disturbances", bdAddr)
@@ -214,7 +213,7 @@ def background_thread():
 		If does not exist return False and datetime.now().
 		"""
 
-		row = db.execute("SELECT * FROM event_log WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", (bdAddr, ))			
+		row = db.execute("SELECT * FROM event_log WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", (bdAddr, )).fetchone()		
 		# print("2.1[get_last]", row)
 
 		if row is not None:
