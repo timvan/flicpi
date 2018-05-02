@@ -87,9 +87,12 @@ def get_last_time_and_state(bdAddr):
 
 def get_daily_total(bdAddr):
 
-	c = db_flicpi.cursor()
-	c.execute("SELECT SUM(disturbance) FROM disturbances WHERE bdAddr=? AND timestamp > datetime('now', 'localtime', 'start of day')", (bdAddr,))
-	total = c.fetchone()
+	user = db_flicpi.execute("SELECT user FROM users WHERE bdAddr = ? ORDER BY ROWID DESC LIMIT 1", (bdAddr,)).fetchone()
+	if user is not None:
+		user = user[0]
+
+	total =  db_flicpi.execute("SELECT SUM(disturbance) FROM disturbances WHERE user=? AND timestamp > datetime('now', 'localtime', 'start of day')", (user,)).fetchone()
+
 	return total[0]
 
 
@@ -144,6 +147,8 @@ def connected_devies_change(data):
 	for change in data:
 		db_flicpi.execute("INSERT INTO users VALUES (?, ?, ?, ?)", (datetime.now(), change['bdAddr'], change['user'], change['slackhandle']))
 		db_flicpi.commit()
+
+	update_state_tabe()
 
 # --------------------- FLIC THREAD ---------------------
 
@@ -238,9 +243,6 @@ def background_thread():
 		Sum total disturbances for this bdAddr in disturbances.
 		Return rounded total.
 		"""
-
-		user = db.execute("SELECT user FROM users WHERE bdAddr = ? ORDER BY ROWID DESC LIMIT 1", (bdAddr,)).fetchone()
-
 
 		user = db.execute("SELECT user FROM users WHERE bdAddr = ? ORDER BY ROWID DESC LIMIT 1", (bdAddr,)).fetchone()
 

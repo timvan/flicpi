@@ -315,7 +315,6 @@
         // console.log(str);
         $connected_devices_tablebody.children().remove();
         $connected_devices_tablebody.append(str);
-
     });
 
     $connectedDevicesForm.submit(function(e){
@@ -345,8 +344,9 @@
             };
         });
 
-        socket.emit('connected devices change', changed_items);
-
+        if(changed_items.length > 0){
+            socket.emit('connected devices change', changed_items);
+        }
     });
 
 </script>
