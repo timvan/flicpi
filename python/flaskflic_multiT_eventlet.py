@@ -187,6 +187,7 @@ def secs_to_string(secs):
 
 	return rendered_time
 
+
 # --------------------- FLIC THREAD ---------------------
 
 
@@ -229,25 +230,29 @@ def background_thread():
 
 	def handle_single_click(bdAddr):
 
-		# socketio.emit('single click', bdAddr)
-		# socket_handle_single_click(bdAddr)
-		
 
 		timestamp, disturbed = get_last(bdAddr)
 
 		
 		if disturbed:
-			distrubance = datetime.now() - timestamp
-			print(bdAddr + " was disturbed for " + str(distrubance) + '.')
+			disturbance = (datetime.now() - timestamp).total_seconds()
+			print(bdAddr + " was disturbed for " + str(disturbance) + '.')
 			user = db.execute("SELECT user FROM users WHERE bdAddr = ? ORDER BY ROWID DESC LIMIT 1", (bdAddr,)).fetchone()
 			
 			if user is not None:
 				user = user[0]
 
-			print('user:', user)
-			db.execute("INSERT INTO disturbances VALUES (?, ?, ?, ?)", (timestamp, bdAddr, user, distrubance.total_seconds()))
-			# print("2.2[handle_single_click] - inserted into disturbances", bdAddr)
+			new_entry = {
+				'timestamp': timestamp,
+				'bdAddr': bdAddr,
+				'user': user,
+				'disruption':disturbance,
+			}
+
+			db.execute("INSERT INTO disturbances VALUES (?, ?, ?, ?)", (new_entry['timestamp'], new_entry['bdAddr'], new_entry['user'], new_entry['disturbance']))
 			db.commit()
+
+			socketio.emit('new disturbance', new_entry)
 
 		else:
 			print(bdAddr, "is now disturbed...")
@@ -294,7 +299,9 @@ def background_thread():
 	client.on_new_verified_button = got_button
 	client.handle_events()
 
+
 # --------------------- NEW SCAN WIZARD THREAD ---------------------
+
 
 def new_scan_wizard_thread():
 

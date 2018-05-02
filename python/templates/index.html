@@ -98,6 +98,8 @@
 
         <!-- DISTURBANCE HISTORY -->
 
+        <br><br>
+
         <div class="card">
             <div class="card-content">
                 <div class="card-title">Disruption History</div>
@@ -347,6 +349,22 @@
         if(changed_items.length > 0){
             socket.emit('connected devices change', changed_items);
         }
+    });
+
+
+    // ----- DISRUPTION HISTORY -----
+
+    socket.on('new disturbance', function(data){
+
+        str += '<tr>';
+        str += ('<td>' + data['timestamp'] + '</td>');
+        str += ('<td>' + data['bdAddr'] + '</td>');
+        str += ('<td>' + data['user'] + '</td>');
+        str += ('<td>' + data['disturbance'] + '</td>');
+        str += '</tr>';
+
+        $('#history_tablebody').prepend(str);
+
     });
 
 
