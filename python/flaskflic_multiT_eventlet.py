@@ -168,7 +168,7 @@ def secs_to_string(secs):
 	secs = math.floor(secs)
 
 	if secs < 60:
-		return (String(secs) + "s")
+		return (str(secs) + "s")
 
 	days = secs // (60 * 60 * 8)
 	hours = (secs // (60 * 60)) % 8
@@ -179,7 +179,7 @@ def secs_to_string(secs):
 	lst = []
 	values = [days, hours, minutes]
 
-	for index, val in values:
+	for index, val in enumerate(values):
 		if val > 0:
 			lst.append(str(val) + units[index])
 
