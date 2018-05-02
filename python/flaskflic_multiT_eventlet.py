@@ -191,7 +191,7 @@ def background_thread():
 		if disturbed:
 			distrubance = datetime.now() - timestamp
 			print(bdAddr + " was disturbed for " + str(distrubance) + '.')
-			user = db.execute("SELECT user FROM users WHERE bdAddr = ? ORDER BY ROWID DESC", (bdAddr,)).fetchone()
+			user = db.execute("SELECT user FROM users WHERE bdAddr = ? ORDER BY ROWID DESC", (bdAddr,)).fetchone()[0]
 			print('user:', user)
 			db.execute("INSERT INTO disturbances VALUES (?, ?, ?, ?)", (timestamp, bdAddr, user, distrubance.total_seconds()))
 			# print("2.2[handle_single_click] - inserted into disturbances", bdAddr)
