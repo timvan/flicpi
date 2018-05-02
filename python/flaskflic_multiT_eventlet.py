@@ -138,7 +138,12 @@ def scan_wizard_succes(new_user):
 
 @socketio.on('connected devices change')
 def connected_devies_change(data):
-	print(data)
+
+	print("Making changes to connected devices... ", data)
+
+	for change in data:
+		db_flicpi.execute("INSERT INTO users VALUES (?, ?, ?, ?)", (datetime.now(), change['bdAddr'], change['user'], change['slackhandle']))
+		db_flicpi.commit()
 
 # --------------------- FLIC THREAD ---------------------
 
