@@ -136,7 +136,9 @@ def scan_wizard_succes(new_user):
 	update_state_tabe()
 
 
-
+@socketio.on('connected devies change')
+def connected_devies_change(data):
+	print(data)
 
 # --------------------- FLIC THREAD ---------------------
 

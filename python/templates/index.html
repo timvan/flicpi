@@ -56,11 +56,6 @@
                     <div class="input-field"><input type="submit" value="Submit" class="modal-action modal-close right"></div>
                 </div>
             </form>
-
-        </div>
-
-        <div class="modal-footer">
-            <a href="" class="modal-action modal-close waves-effect waves-red btn-flat">Close</a>
         </div>
     </div>
 
@@ -302,18 +297,18 @@
 
     $connected_devices_tablebody = $('#connected_devices_tablebody');
 
-    $connectedDevicesForm = $();
+    $connectedDevicesForm = $('#connectedDevicesForm');
 
     socket.on('got connected devices', function(data){
 
         var str = ''
 
         for (var i = 0; i < data.length; i++){
-            str += ('<tr>')
+            str += ('<tr id="connectedDevicesForm_rows">')
             str += ('<td>' + String(data[i]['color']) + '</td>');
-            str += ('<td>' + String(data[i]['bdAddr']) + '</td>');
-            str += ('<td><div class="input-field"><input id="user' + String(i) +'" type="text" value="' + String(data[i]['user']) + '"></div></td>');
-            str += ('<td><div class="input-field"><input id="user' + String(i) +'" type="text" value="' + String(data[i]['slackhandle']) + '"></div></td>');
+            str += ('<td class="bdAddr">' + String(data[i]['bdAddr']) + '</td>');
+            str += ('<td><div class="input-field"><input field ="user" id="user' + String(i) +'" type="text" value="' + String(data[i]['user']) + '"></div></td>');
+            str += ('<td><div class="input-field"><input field="slackhandle" id="user' + String(i) +'" type="text" value="' + String(data[i]['slackhandle']) + '"></div></td>');
             // str += ('<td>' + String(data[i]['status']) + '</td>');
             str += ('</tr>')
         };
@@ -321,7 +316,36 @@
         $connected_devices_tablebody.children().remove();
         $connected_devices_tablebody.append(str);
 
-        $connectedDevicesForm = $('#connectedDevicesForm');
+    });
+
+    $connectedDevicesForm.submit(function(e){
+        e.preventDefault();
+        // #connectedDevicesForm_rows = $('#connectedDevicesForm_rows')
+        var rows = $connected_devices_tablebody.children();
+        var changed_items = [];
+
+        rows.each(function(){
+            var change = {};
+            change['bdAddr'] = $(this).find('td.bdAddr')["0"].textContent;
+            var has_changed = false;
+
+            $(this).find('input').each(function(){
+                if($(this).context.value != $(this).context.defaultValue){
+                    has_changed = true;
+                    change[$(this).attr('field')] = $(this).context.value;
+                }else{
+                    change[$(this).attr('field')] = $(this).context.defaultValue;
+                };
+            });
+
+            console.log(change);
+
+            if (has_changed){
+                changed_items.push(change)
+            };
+        });
+
+        socket.emit('connected devices change', changed_items);
 
     });
 
