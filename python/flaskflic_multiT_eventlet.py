@@ -46,9 +46,9 @@ def index():
 	for row in rows:
 		history.append({
 			'timestamp': row[0],
-			'bd_addr': row[1],
+			'bdAddr': row[1],
 			'user': row[2],
-			'disturbance': row[3],
+			'disruption': row[3],
 			})
 
 	return render_template('index.html', history = history)
