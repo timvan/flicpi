@@ -164,7 +164,7 @@ def connected_devies_change(data):
 
 def secs_to_string(secs):
 
-	secs = floor(secs)
+	secs = round(secs, 0)
 
 	if secs < 60:
 		return (String(secs) + "s")
