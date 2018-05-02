@@ -130,10 +130,10 @@ def scan_wizard_succes(new_user):
 	# db.execute("INSERT INTO users VALUES (?, ?, ?)", (bdAddr, username, slackhandle))
 	# db.commit()
 	print('scan wizard insert', new_user)
-
 	c = db_flicpi.cursor()
 	c.execute("UPDATE users SET user = ?, slackhandle = ? WHERE bdAddr = ?", (new_user['username'], new_user['slackhandle'], new_user['bdAddr']))
 	db_flicpi.commit()
+	update_state_tabe()
 
 
 
