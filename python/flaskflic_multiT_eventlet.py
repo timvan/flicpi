@@ -231,7 +231,16 @@ def background_thread():
 		Sum total disturbances for this bdAddr in disturbances.
 		Return rounded total.
 		"""
-		total = db.execute("SELECT SUM(disturbance) FROM disturbances WHERE bdAddr=?", (bdAddr,)).fetchone()
+
+		user = db.execute("SELECT user FROM users WHERE bdAddr = ? ORDER BY ROWID DESC LIMIT 1", (bdAddr,)).fetchone()
+
+
+		user = db.execute("SELECT user FROM users WHERE bdAddr = ? ORDER BY ROWID DESC LIMIT 1", (bdAddr,)).fetchone()
+
+		if user is not None:
+			user = user[0]
+
+		total = db.execute("SELECT SUM(disturbance) FROM disturbances WHERE uesr=?", (user,)).fetchone()
 		return round(total[0], 0)
 
 
