@@ -50,7 +50,6 @@ def update_state_tabe():
 	c = db_flicdeamon.cursor()
 	c.execute("SELECT bdaddr, color FROM buttons")
 	devs = c.fetchall()
-	c.close()
 
 	for i, device in enumerate(devs):
 		timestamp, state = get_last_time_and_state(device[0])
@@ -80,7 +79,6 @@ def get_last_time_and_state(bdAddr):
 	c = db_flicpi.cursor()
 	c.execute("SELECT * FROM event_log WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", (bdAddr, ))
 	row = c.fetchone()			
-	c.close()
 	# print('1[get_last_time_and_state]', row)
 
 	if row is not None:
@@ -94,7 +92,6 @@ def get_daily_total(bdAddr):
 	c = db_flicpi.cursor()
 	c.execute("SELECT SUM(disturbance) FROM disturbances WHERE bdAddr=? AND timestamp > datetime('now', 'localtime', 'start of day')", (bdAddr,))
 	total = c.fetchone()
-	c.close()
 	return total[0]
 
 
@@ -113,7 +110,6 @@ def get_connected_devices():
 	c = db_flicdeamon.cursor()
 	c.execute("SELECT bdaddr, color FROM buttons")
 	devs = c.fetchall()
-	c.close()
 
 	for i, device in enumerate(devs):
 		row = {
@@ -137,8 +133,7 @@ def scan_wizard_succes(new_user):
 
 	c = db_flicpi.cursor()
 	c.execute("UPDATE users SET user = ?, slackhandle = ? WHERE bdAddr = ?", (new_user['username'], new_user['slackhandle'], new_user['bdAddr']))
-	c.commit()
-	c.close()
+	db_flicpi.commit()
 
 
 
@@ -277,8 +272,7 @@ def new_scan_wizard_thread():
 			
 			c = db_flicpi.cursor()
 			c.execute("INSERT INTO users VALUES (?, ?, ?)", (bd_addr, None, None))
-			c.commit()
-			c.close()
+			db_flicpi.commit()
 
 			msg = ("Your button is now ready. The bd addr is " + bd_addr + ".")
 			print(msg)
@@ -287,7 +281,6 @@ def new_scan_wizard_thread():
 			c = db_flicdeamon.cursor()
 			c.execute("SELECT color FROM buttons WHERE bdAddr = ?", (bd_addr, ))
 			color = c.fetchone()
-			c.close()
 			
 			data = {
 			 'bdAddr': bd_addr,
