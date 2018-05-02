@@ -48,7 +48,7 @@ def index():
 			'timestamp': row[0],
 			'bdAddr': row[1],
 			'user': row[2],
-			'disruption': row[3],
+			'disruption': secs_to_string(row[3]),
 			})
 
 	return render_template('index.html', history = history)
@@ -160,6 +160,31 @@ def connected_devies_change(data):
 		db_flicpi.commit()
 
 	update_state_tabe()
+
+
+def secs_to_string(secs):
+
+    secs = floor(secs)
+
+    if secs < 60:
+	    return (String(secs) + "s")
+
+    days = secs // (60 * 60 * 8)
+    hours = (secs // (60 * 60)) % 8
+	minutes = (secs // 60) % 60
+
+    units = ['d', 'h', 'm']
+
+    lst = []
+    values = [days, hours, minutes]
+
+    for index, val in values:
+        if val > 0:
+            lst.append(str(val) + units[index])
+
+    rendered_time = lst.join(" ")
+	
+	return rendered_time
 
 # --------------------- FLIC THREAD ---------------------
 
