@@ -128,7 +128,7 @@ def scan_wizard_succes(new_user):
 	# db.execute("INSERT INTO users VALUES (?, ?, ?)", (bdAddr, username, slackhandle))
 	# db.commit()
 	print('scan wizard insert', new_user)
-	rowid = ("SELECT ROWID FROM users WHERE bdAddr = ? ORDER BY ROWID DESC LIMIT 1", (new_user['bdAddr'], )).fetchone()
+	rowid = db_flicpi.execute("SELECT ROWID FROM users WHERE bdAddr = ? ORDER BY ROWID DESC LIMIT 1", (new_user['bdAddr'], )).fetchone()
 
 	c = db_flicpi.cursor()
 	c.execute("UPDATE users SET user = ?, slackhandle = ? WHERE ROWID = ?", (new_user['username'], new_user['slackhandle'], rowid[0]))
