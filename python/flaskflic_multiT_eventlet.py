@@ -273,7 +273,7 @@ def new_scan_wizard_thread():
 		if result == fliclib.ScanWizardResult.WizardSuccess:
 			
 			c = db_flicpi.cursor()
-			c.execute("INSERT INTO users VALUES (?, ?, ?)", (bd_addr, None, None))
+			c.execute("INSERT INTO users VALUES (?, ?, ?, ?)", (datetime.now(), bd_addr, None, None))
 			db_flicpi.commit()
 
 			msg = ("Your button is now ready. The bd addr is " + bd_addr + ".")
