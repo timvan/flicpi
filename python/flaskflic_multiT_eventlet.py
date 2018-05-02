@@ -136,7 +136,7 @@ def scan_wizard_succes(new_user):
 	update_state_tabe()
 
 
-@socketio.on('connected devies change')
+@socketio.on('connected devices change')
 def connected_devies_change(data):
 	print(data)
 
