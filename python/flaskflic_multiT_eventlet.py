@@ -116,8 +116,8 @@ def get_connected_devices():
 		row = {
 			'bdAddr': device[0],
 			'color': device[1],
-			'user': i,
-			'slackhandle': "slack handle",
+			'user': db_flicpi.execute("SELECT user FROM users WHERE bdAddr = ? ORDER BY ROWID DESC", (device[0],)).fetchone(),
+			'slackhandle': db_flicpi.execute("SELECT slackhandle FROM users WHERE bdAddr = ? ORDER BY ROWID DESC", (device[0],)).fetchone(),
 		}
 		table.append(row)
 

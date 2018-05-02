@@ -46,7 +46,6 @@
                         <th>bdAddr</th>
                         <th class="">User</th>
                         <th>Slack Handle</th>
-                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody id="connected_devices_tablebody">
@@ -83,7 +82,7 @@
 				<table id="state_table">
 					<thead>
 						<tr>
-							<th>bdAddr</th>
+							<!-- <th>bdAddr</th> -->
 							<th class="">User</th>
 							<th>Colour</th>
 							<th>Status</th>
@@ -151,7 +150,10 @@
     	var str = ''
     	for (var i = 0; i < data.length; i++){
     		str += ('<tr bdAddr="' + data[i]['bdAddr'] + '">')
-    		str += ('<td>' + String(data[i]['bdAddr']) + '</td><td class="">' + String(data[i]['user']) + '</td><td>' + String(data[i]['color']) + '</td><td>' + String(data[i]['state']) + '</td>')
+    		// str += ('<td>' + String(data[i]['bdAddr']) + '</td>')
+            str += ('<td>' + String(data[i]['user']) + '</td>')
+            str += ('<td>' + String(data[i]['color']) + '</td>')
+            str += ('<td>' + String(data[i]['state']) + '</td>')
 
     		if(String(data[i]['state']) == 'true'){
     			str += ('<td class="current_disruption active" disruption_start="' + String(data[i]['disruption_start']) + '"></td>');
@@ -303,7 +305,7 @@
             str += ('<td>' + String(data[i]['bdAddr']) + '</td>');
             str += ('<td>' + String(data[i]['user']) + '</td>');
             str += ('<td>' + String(data[i]['slackhandle']) + '</td>');
-            str += ('<td>' + String(data[i]['status']) + '</td>');
+            // str += ('<td>' + String(data[i]['status']) + '</td>');
             str += ('</tr>')
 
         };
