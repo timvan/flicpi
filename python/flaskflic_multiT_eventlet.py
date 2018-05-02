@@ -7,6 +7,7 @@ import sqlite3
 import threading
 from threading import Lock
 import json
+import math
 
 # thread_lock = Lock()
 
@@ -164,7 +165,7 @@ def connected_devies_change(data):
 
 def secs_to_string(secs):
 
-	secs = round(secs, 0)
+	secs = math.floor(secs)
 
 	if secs < 60:
 		return (String(secs) + "s")
