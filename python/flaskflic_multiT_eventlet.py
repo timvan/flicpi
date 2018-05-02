@@ -164,26 +164,26 @@ def connected_devies_change(data):
 
 def secs_to_string(secs):
 
-    secs = floor(secs)
+	secs = floor(secs)
 
-    if secs < 60:
-	    return (String(secs) + "s")
+	if secs < 60:
+		return (String(secs) + "s")
 
-    days = secs // (60 * 60 * 8)
-    hours = (secs // (60 * 60)) % 8
+	days = secs // (60 * 60 * 8)
+	hours = (secs // (60 * 60)) % 8
 	minutes = (secs // 60) % 60
 
-    units = ['d', 'h', 'm']
+	units = ['d', 'h', 'm']
 
-    lst = []
-    values = [days, hours, minutes]
+	lst = []
+	values = [days, hours, minutes]
 
-    for index, val in values:
-        if val > 0:
-            lst.append(str(val) + units[index])
+	for index, val in values:
+		if val > 0:
+			lst.append(str(val) + units[index])
 
-    rendered_time = lst.join(" ")
-	
+	rendered_time = lst.join(" ")
+
 	return rendered_time
 
 # --------------------- FLIC THREAD ---------------------
