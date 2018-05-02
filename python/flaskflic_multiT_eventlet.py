@@ -183,7 +183,7 @@ def secs_to_string(secs):
 		if val > 0:
 			lst.append(str(val) + units[index])
 
-	rendered_time = lst.join(" ")
+	rendered_time = " ".join(lst)
 
 	return rendered_time
 
