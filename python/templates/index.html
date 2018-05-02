@@ -69,15 +69,14 @@
     </div>
 
 
-    <!-- STATUS TABLE -->
 
 	<div class="container">
 
 		<br><br>
 
-		<div class="card">
-			
-
+        <!-- STATUS TABLE -->
+		
+        <div class="card">
 			<div class="card-content">
 				<div class="card-title">Flic Buttons</div>
 				<table id="state_table">
@@ -97,7 +96,43 @@
 			</div>
 		</div>
 
+        <!-- DISTURBANCE HISTORY -->
+
+        <div class="card">
+            <div class="card-content">
+                <div class="card-title">Disturbance History</div>
+                <table id="history_table">
+                    <thead>
+                        <tr>
+                            <!-- <th>bdAddr</th> -->
+                            <th>Timestamp</th>
+                            <th>bdAddr</th>
+                            <th>User</th>
+                            <!-- <th>Colour</th> -->
+                            <th>Disruption</th>
+                    </thead>
+                    <tbody id="history_tablebody">
+                        {% for row in history %}
+                            <tr>
+                                <td>{{ row.timestamp }}</td>
+                                <td>{{ row.bdAddr }}</td>
+                                <td>{{ row.user }}</td>
+                                <td>{{ row.disruption }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>       
+
+        <!-- GRAPH -->
+
+
+
+
 	</div>
+
+    
 
 
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
@@ -106,23 +141,23 @@
 <script type="text/javascript" charset="utf-8">
 
 
-    // ----- FAB -----
+    // ----- INIT FAB -----
     var FAB = document.querySelector('.fixed-action-btn');
     var instance = M.FloatingActionButton.init(FAB, {});
 
-    // ----- CONNECTED DEVICES MODAL -----
+    // ----- INIT CONNECTED DEVICES MODAL -----
 
     var modal_connected_devices = document.getElementById('modal_connected_devices');
     var instance = M.Modal.init(modal_connected_devices, {});
 
 
-    // ----- MODAL -----
+    // ----- INIT ADD FLIC MODAL -----
 
     var modal_add_flic = document.getElementById('modal_add_flic');
     var instance = M.Modal.init(modal_add_flic, {});
 
 
-    // ----- SCOKETS -----
+    // ----- STATE TABLE -----
 
     var socket = io.connect('http://' + document.domain + ':' + location.port);
 
@@ -191,41 +226,6 @@
 	    	};
     	});
     }, 1000);
-
-
-    function secs_to_string(secs) {
-
-    	// console.log(millis);
-
-    	secs = Math.floor(secs);
-
-        if (secs < 60){
-            return (String(secs) + "s")
-        }
-
-    	var days = Math.floor(secs / (60 * 60 * 8));
-    	var hours = Math.floor(secs / (60 * 60)) % 8;
-    	var minutes = Math.floor(secs / 60) % 60;
-
-    	var units = ['d', 'h', 'm'];
-
-    	var lst = [];
-    	var values = [days, hours, minutes];
-
-    	console.log(values);
-
-    	for(var j = 0; j < values.length; j++){
-    		if(values[j] > 0){
-    			lst.push(String(values[j]) + units[j]);
-    		};
-    	};
-
-    	console.log(lst);
-
-    	var rendered_time = lst.join(" ");
-
-    	return rendered_time;
-    }
 
 
     // ----- NEW SCAN WIZARD -----
@@ -348,6 +348,43 @@
             socket.emit('connected devices change', changed_items);
         }
     });
+
+
+    // ----- HELPERS -----
+
+    function secs_to_string(secs) {
+
+        // console.log(millis);
+
+        secs = Math.floor(secs);
+
+        if (secs < 60){
+            return (String(secs) + "s")
+        }
+
+        var days = Math.floor(secs / (60 * 60 * 8));
+        var hours = Math.floor(secs / (60 * 60)) % 8;
+        var minutes = Math.floor(secs / 60) % 60;
+
+        var units = ['d', 'h', 'm'];
+
+        var lst = [];
+        var values = [days, hours, minutes];
+
+        console.log(values);
+
+        for(var j = 0; j < values.length; j++){
+            if(values[j] > 0){
+                lst.push(String(values[j]) + units[j]);
+            };
+        };
+
+        console.log(lst);
+
+        var rendered_time = lst.join(" ");
+
+        return rendered_time;
+    } 
 
 </script>
 

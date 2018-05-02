@@ -39,7 +39,19 @@ db_flicpi =  sqlite3.connect('flicpi.db')
 
 @app.route('/')
 def index():
-	return render_template('index.html')
+
+	history = []
+	rows = db_flicpi.execute("SELECT * FROM disturbances ORDER BY timestamp DESC").fetchall()
+
+	for row in rows:
+		history.append({
+			'timestamp': row[0],
+			'bd_addr': row[1],
+			'user': row[2],
+			'disturbance': row[3],
+			})
+
+	return render_template('index.html', history = history)
 
 
 @socketio.on('page loaded')
@@ -94,7 +106,6 @@ def get_daily_total(bdAddr):
 	total =  db_flicpi.execute("SELECT SUM(disturbance) FROM disturbances WHERE user=? AND timestamp > datetime('now', 'localtime', 'start of day')", (user,)).fetchone()
 
 	return total[0]
-
 
 
 @socketio.on('start new scan wizard')
