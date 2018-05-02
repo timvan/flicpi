@@ -121,6 +121,9 @@ def scan_wizard_succes(new_user):
 	# db.execute("INSERT INTO users VALUES (?, ?, ?)", (bdAddr, username, slackhandle))
 	# db.commit()
 	print('scan wizard insert', new_user)
+	db.execute("UPDATE users SET user = ?, slackhandle = ? WHERE bdAddr = ?", (new_user['username'], new_user['slackhandle'], new_user['bdAddr']))
+	db.commit()
+	
 
 
 
@@ -229,7 +232,8 @@ def new_scan_wizard_thread():
 
 	wizard_client = fliclib.FlicClient("localhost")
 
-	db_deamon = sqlite3.connect('../bin/armv6l/flicd.sqlite.db')
+	db_sw_deamon = sqlite3.connect('../bin/armv6l/flicd.sqlite.db')
+	db_sw_flicpi =  sqlite3.connect('flicpi.db')
 
 	def on_found_private_button(scan_wizard):
 		msg = ("Found a private button. Please hold it down for 7 seconds to make it public.")
@@ -254,10 +258,14 @@ def new_scan_wizard_thread():
 
 
 		if result == fliclib.ScanWizardResult.WizardSuccess:
+			
+			db_sw_flicpi.execute("INSERT INTO users VALUES (?, ?, ?)", (bd_addr, None, None))
+			dw_sw_flicpi.commit()
+
 			msg = ("Your button is now ready. The bd addr is " + bd_addr + ".")
 			print(msg)
 			socketio.emit('scan wizard', msg)
-			color = db_deamon.execute("SELECT color FROM buttons WHERE bdAddr = ?", (bd_addr, )).fetchone()
+			color = db_sw_deamon.execute("SELECT color FROM buttons WHERE bdAddr = ?", (bd_addr, )).fetchone()
 			
 			data = {
 			 'bdAddr': bd_addr,
