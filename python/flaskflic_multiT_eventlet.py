@@ -49,7 +49,7 @@ def index():
 			'timestamp': row[0],
 			'bdAddr': row[1],
 			'user': row[2],
-			'disruption': secs_to_string(row[3]),
+			'disturbance': secs_to_string(row[3]),
 			})
 
 	return render_template('index.html', history = history)
@@ -73,7 +73,7 @@ def update_state_tabe():
 			'color': device[1],
 			'user': db_flicpi.execute("SELECT user FROM users WHERE bdAddr = ? ORDER BY ROWID DESC LIMIT 1", (device[0],)).fetchone(),
 			'state': state,
-			'disruption_start': timestamp.ctime() if state else None,
+			'disturbance_start': timestamp.ctime() if state else None,
 			'daily_total': daily_total if daily_total else 0,
 		}
 		table.append(row)
@@ -246,7 +246,7 @@ def background_thread():
 				'timestamp': timestamp,
 				'bdAddr': bdAddr,
 				'user': user,
-				'disruption':disturbance,
+				'disturbance':disturbance,
 			}
 
 			db.execute("INSERT INTO disturbances VALUES (?, ?, ?, ?)", (new_entry['timestamp'], new_entry['bdAddr'], new_entry['user'], new_entry['disturbance']))
