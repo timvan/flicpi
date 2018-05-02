@@ -249,8 +249,8 @@
         var str_form = "";
 
         str_form += '<div class="row"><form class="col s12" id="newUserForm">';
-        str_form += ('<div class="row"><div class="input-field col s12"><input disabled placeholder="' + String(data['color']) +  '" type="text" id="form_color"></div></div>');
-        str_form += ('<div class="row"><div class="input-field col s12"><input disabled placeholder="' + String(data['bdAddr']) +  '" type="text" id="form_bdAddr">' + String(data['bdAddr']) +'</div></div>');
+        str_form += ('<div class="row"><div class="input-field col s12"><input disabled value="' + String(data['color']) +  '" type="text" id="form_color"></div></div>');
+        str_form += ('<div class="row"><div class="input-field col s12"><input disabled value="' + String(data['bdAddr']) +  '" type="text" id="form_bdAddr"></div></div>');
         str_form += '<div class="row"><div class="input-field col s12"><label for="form_username">Username</label><input type="text" id="form_username"></div></div>';
         str_form += '<div class="row"><div class="input-field col s12"><label for="form_slackhandle">Slack Handle</label><input type="text" id="form_slackhandle"></div></div>';
         str_form += '<div class="row"><div class="input-field col s12"><input type="submit" value="Submit" class="modal-action modal-close right"></div></div>';
