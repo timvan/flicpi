@@ -296,22 +296,29 @@
 
     $connected_devices_tablebody = $('#connected_devices_tablebody');
 
+    $connectedDevicesForm = $();
+
     socket.on('got connected devices', function(data){
 
         var str = ''
+
         for (var i = 0; i < data.length; i++){
-            str += ('<tr>')
+            str += ('<tr><form id="connectedDevicesForm">')
             str += ('<td>' + String(data[i]['color']) + '</td>');
             str += ('<td>' + String(data[i]['bdAddr']) + '</td>');
-            str += ('<td>' + String(data[i]['user']) + '</td>');
-            str += ('<td>' + String(data[i]['slackhandle']) + '</td>');
+            str += ('<td><div class="input-field"><input id="user' + String(i) +'" type="text" value="' + String(data[i]['user']) + '"></div></td>');
+            str += ('<td><div class="input-field"><input id="user' + String(i) +'" type="text" value="' + String(data[i]['slackhandle']) + '"></div></td>');
             // str += ('<td>' + String(data[i]['status']) + '</td>');
             str += ('</tr>')
+            str_form += '<div class="row"><div class="input-field col s12"><input type="submit" value="Submit" class="modal-action modal-close right"></div></div>';
+            str += ('</form>')
 
         };
         // console.log(str);
         $connected_devices_tablebody.children().remove();
         $connected_devices_tablebody.append(str);
+
+        $connectedDevicesForm = $('#connectedDevicesForm');
 
     });
 
