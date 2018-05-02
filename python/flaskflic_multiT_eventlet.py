@@ -48,8 +48,9 @@ def update_state_tabe():
 	table = []
 
 	c = db_flicdeamon.cursor()
-	c.execute("SELECT bdaddr, color FROM buttons")
+	c.execute("SELECT bdAddr, color FROM buttons")
 	devs = c.fetchall()
+
 
 	for i, device in enumerate(devs):
 		timestamp, state = get_last_time_and_state(device[0])
@@ -57,7 +58,7 @@ def update_state_tabe():
 		row = {
 			'bdAddr': device[0],
 			'color': device[1],
-			'user': i,
+			'user': db_flicpi.execute("SELECT user FROM users WHERE bdAddr = ? ORDER BY ROWID DESC", (device[0],)).fetchone(),
 			'state': state,
 			'disruption_start': timestamp.ctime() if state else None,
 			'daily_total': daily_total if daily_total else 0,
