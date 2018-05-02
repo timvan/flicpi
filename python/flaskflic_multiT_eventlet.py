@@ -58,7 +58,7 @@ def update_state_tabe():
 		row = {
 			'bdAddr': device[0],
 			'color': device[1],
-			'user': db_flicpi.execute("SELECT user FROM users WHERE bdAddr = ? ORDER BY ROWID DESC LIMIT 1", (device[0],)),
+			'user': db_flicpi.execute("SELECT user FROM users WHERE bdAddr = ? ORDER BY ROWID DESC LIMIT 1", (device[0],)).fetchone(),
 			'state': state,
 			'disruption_start': timestamp.ctime() if state else None,
 			'daily_total': daily_total if daily_total else 0,
