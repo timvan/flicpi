@@ -163,7 +163,7 @@ def get_graph_history():
 		row =[day_str]
 
 		for i, device in enumerate(devs):
-			user = users[i]
+			user = users[i][0]
 
 			d1 = str(day)
 			d2 = str(day + timedelta(days = 1))
