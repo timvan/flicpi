@@ -8,6 +8,7 @@
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
     <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 	<title>Flic Pi </title>
 </head>
@@ -95,6 +96,15 @@
 				</table>
 			</div>
 		</div>
+
+        <br>
+
+        <div class="card">
+            <div class="card-content">
+                <div class="card-title">Fortnight History</div>
+                <div id="graph"></div>
+            </div>
+        </div>
 
         <!-- DISTURBANCE HISTORY -->
 
@@ -369,13 +379,32 @@
 
     });
 
-
     // ----- GRAPH -----
 
-    socket.on('graph', function(data){
-        console.log(data);
-    })
+    google.charts.load('current', {packages: ['corechart', 'bar']});
+    google.charts.setOnLoadCallback(drawMaterial);
 
+
+    socket.on('graph', function(raw_data){
+        console.log(raw_data);
+
+
+        function drawGraph(raw_data) {
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Date');
+            data.addColumn('number', 'User1');
+            data.addColumn('number', 'User2');
+            data.addColumn('number', 'User3');
+
+            data.addRows(raw_data);
+
+            var options = {};
+
+            var bar_graph = new google.charts.Bar(document.getElementById('graph'));
+            bar_graph.draw(data, options);
+
+        }
+    });
 
     // ----- HELPERS -----
 
