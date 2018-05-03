@@ -246,7 +246,7 @@ def background_thread():
 				'timestamp': str(timestamp),
 				'bdAddr': bdAddr,
 				'user': user,
-				'disturbance':secs_to_string(disturbance),
+				'disturbance':secs_to_string(float(disturbance)),
 			}
 
 			db.execute("INSERT INTO disturbances VALUES (?, ?, ?, ?)", (new_entry['timestamp'], new_entry['bdAddr'], new_entry['user'], new_entry['disturbance']))
