@@ -383,21 +383,22 @@
 
 
 
-    var data_in;
+    var data_in = [];
 
     socket.on('graph', function(raw_data){
         console.log(raw_data);
         data_in = raw_data;
         console.log('Graph been called...')
-        drawGraph(data_in)
+        google.charts.load('current', {packages: ['corechart', 'bar']});
+        google.charts.setOnLoadCallback(drawGraph);
     });
 
 
     google.charts.load('current', {packages: ['corechart', 'bar']});
-    google.charts.setOnLoadCallback(drawGraph(data_in));
+    google.charts.setOnLoadCallback(drawGraph);
 
 
-    function drawGraph(data_in) {
+    function drawGraph() {
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'Date');
         data.addColumn('number', 'User1');
