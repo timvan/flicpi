@@ -165,7 +165,7 @@ def connected_devies_change(data):
 
 def secs_to_string(secs):
 
-	secs = math.floor(secs)
+	secs = math.floor(float(secs))
 
 	if secs < 60:
 		return (str(secs) + "s")
@@ -246,7 +246,7 @@ def background_thread():
 				'timestamp': str(timestamp),
 				'bdAddr': bdAddr,
 				'user': user,
-				'disturbance':secs_to_string(float(disturbance)),
+				'disturbance':secs_to_string(disturbance),
 			}
 
 			db.execute("INSERT INTO disturbances VALUES (?, ?, ?, ?)", (new_entry['timestamp'], new_entry['bdAddr'], new_entry['user'], new_entry['disturbance']))
