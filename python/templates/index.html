@@ -395,10 +395,10 @@
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'Date');
 
-        for (var i = 0; i < devs.length; i++){
+        for (var i = 0; i < devices.length; i++){
             data.addColumn('number', devices[i][0]);
         }
-        data.addRows(data_in)
+        data.addRows(reverse(data_in));
 
         // for(var i = 0; i < data_in.length; i++){
         //     console.log(data_in[i]);
