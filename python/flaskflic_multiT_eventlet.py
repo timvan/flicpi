@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 from flask_socketio import SocketIO
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 import dateutil.parser
 import fliclib
 import sqlite3
@@ -148,10 +148,10 @@ def get_graph_history():
 	for i in range(days_to_graph):
 		n += i
 
-		if (datetime.date.today() - datetime.timedelta(days = n)).weekday() in [5,6]:
+		if (date.today() - timedelta(days = n)).weekday() in [5,6]:
 			n += 2
 
-		day_str = str(datetime.date.today() - datetime.timedelta(days = n))
+		day_str = str(date.today() - timedelta(days = n))
 
 		row =[day_str]
 
