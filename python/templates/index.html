@@ -389,19 +389,6 @@
         console.log(raw_data);
         data_in = raw_data;
         console.log('Graph been called...')
-
-
-        for(var i = 0; i < data_in.length; i++){
-            console.log(data_in[i]);
-
-            for(var j = 0; j < data_in[i].length; j++){
-                console.log(data_in[i][j]);
-            }
-
-        }
-
-        console.log(raw_data, typeof(data_in));
-        console.log(data_in, typeof(data_in));
         drawGraph()
     });
 
@@ -417,7 +404,10 @@
         data.addColumn('number', 'User2');
         data.addColumn('number', 'User3');
 
-        data.addRows(data_in);
+
+        for(var i = 0; i < data_in.length; i++){
+            data.addRow(data_in[i]);
+        }
 
         var options = {};
 
