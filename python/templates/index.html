@@ -397,11 +397,12 @@
         data.addColumn('number', 'User2');
         data.addColumn('number', 'User3');
 
+        data.addRows(data_in)
 
-        for(var i = 0; i < data_in.length; i++){
-            console.log(data_in[i]);
-            data.addRow(data_in[i]);
-        }
+        // for(var i = 0; i < data_in.length; i++){
+        //     console.log(data_in[i]);
+        //     data.addRow(data_in[i]);
+        // }
 
         var options = {};
 
@@ -411,7 +412,7 @@
     };
 
     socket.on('graph', function(raw_data){
-        console.log(raw_data);
+        // console.log(raw_data);
         data_in = raw_data;
         console.log('Graph been called...')
         google.charts.load('current', {packages: ['corechart', 'bar']});
