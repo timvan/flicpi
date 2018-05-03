@@ -396,7 +396,7 @@
         data.addColumn('string', 'Date');
 
         for (var i = 0; i < users.length; i++){
-            data.addColumn('number', users[i]);
+            data.addColumn('number', users[i][0]);
         }
         data.addRows(data_in.reverse());
 
@@ -405,7 +405,24 @@
         //     data.addRow(data_in[i]);
         // }
 
-        var options = {};
+        var colors_m = {
+            'turqoise': '#a7ffeb',
+            'black': '#212121',
+            'green': '#ccff90',
+            'white': '#fafafa',
+        }
+
+        var colors = [];
+        for (var i = 0; i < users.length; i++){
+            colors.push(users[i][1]);
+        }
+
+        var options = {
+            hAxis : {
+                title: "Minutes per Day"
+            },
+            colors : []
+        };
 
         var bar_graph = new google.charts.Bar(document.getElementById('graph'));
         bar_graph.draw(data, options);

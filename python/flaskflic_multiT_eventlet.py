@@ -142,7 +142,7 @@ def get_graph_history():
 	days_to_graph = 10
 	devs = db_flicdeamon.execute("SELECT bdaddr, color FROM buttons").fetchall()
 
-	users = [get_user(device[0]) for device in devs]
+	users = [[get_user(device[0]), device[1]] for device in devs]
 
 	rows = []
 
