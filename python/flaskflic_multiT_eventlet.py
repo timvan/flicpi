@@ -165,7 +165,7 @@ def get_graph_history():
 			d2 = str(day + timedelta(days = 1))
 			print(d1, d2)
 			
-			t = get_day_disturbance_by_user(user, d1, d2)
+			t = get_total_disturbance_between_days_by_user(user, d1, d2)
 			row.append(math.floor( t / 60.0))
 				
 		rows.append(row)
