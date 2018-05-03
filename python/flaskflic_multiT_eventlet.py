@@ -149,9 +149,10 @@ def get_graph_history():
 
 		day = date.today() - timedelta(days = n)
 
-
+		
 		if day.weekday() in [5,6]:
 			n += 2
+			day = date.today() - timedelta(days = n)
 
 		day_str = str(day)
 
