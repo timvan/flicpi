@@ -381,14 +381,16 @@
 
     // ----- GRAPH -----
 
-    google.charts.load('current', {packages: ['corechart', 'bar']});
-    google.charts.setOnLoadCallback(drawMaterial);
+
 
 
     socket.on('graph', function(raw_data){
         console.log(raw_data);
+        drawGraph(raw_data);
 
-
+        google.charts.load('current', {packages: ['corechart', 'bar']});
+        google.charts.setOnLoadCallback(drawGraph);
+        
         function drawGraph(raw_data) {
             var data = new google.visualization.DataTable();
             data.addColumn('string', 'Date');
@@ -402,9 +404,8 @@
 
             var bar_graph = new google.charts.Bar(document.getElementById('graph'));
             bar_graph.draw(data, options);
-
-        }
-    });
+        };
+    };
 
     // ----- HELPERS -----
 
