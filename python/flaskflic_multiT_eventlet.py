@@ -324,6 +324,7 @@ def background_thread():
 		db.commit()
 
 		update_state_tabe()
+		get_graph_history()
 		
 
 	def get_last(bdAddr):

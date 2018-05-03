@@ -383,7 +383,7 @@
 
 
 
-    // var data_in;
+    var data_in;
 
     socket.on('graph', function(raw_data){
         console.log(raw_data);
@@ -394,7 +394,7 @@
 
 
     google.charts.load('current', {packages: ['corechart', 'bar']});
-    // google.charts.setOnLoadCallback(drawGraph);
+    google.charts.setOnLoadCallback(drawGraph(data_in));
 
 
     function drawGraph(data_in) {
