@@ -137,7 +137,6 @@ def get_connected_devices():
 	socketio.emit('got connected devices', table)
 
 
-
 def get_graph_history():
 	days_to_graph = 10
 	devs = db_flicdeamon.execute("SELECT bdaddr, color FROM buttons").fetchall()
@@ -182,7 +181,6 @@ def get_graph_history():
 	socketio.emit('graph', [rows, users])
 
 
-
 def get_total_disturbance_between_days_by_user(user, day1, day2):
 
 	str = "SELECT SUM(disturbance) FROM disturbances WHERE user=" + user + ""
@@ -192,14 +190,12 @@ def get_total_disturbance_between_days_by_user(user, day1, day2):
 	return total[0]
 
 
-
 def get_user(bdAddr):
 
 	user = db_flicpi.execute("SELECT user FROM users WHERE bdAddr = ? ORDER BY ROWID DESC LIMIT 1", (bdAddr,)).fetchone()
 	if user is not None:
 		user = user[0]
 	return user
-
 
 
 @socketio.on('scan wizard insert')
@@ -262,7 +258,7 @@ def background_thread():
 
 	print("Running T...")
 
-	client = fliclib.FlicClient("localhost")
+	client = fliclib.FlicClient("0.0.0.0")
 
 	# flicpi.db .event_log: (timestamp TEXT, bdAddr TEXT, status INTEGER)
 	# flicpi.db .disturbances: (timestamp TEXT, bdADdr TEXT, disturbance INTEGER)
@@ -379,7 +375,7 @@ def new_scan_wizard_thread():
 	print(msg)
 	socketio.emit('scan wizard', msg)
 
-	wizard_client = fliclib.FlicClient("localhost")
+	wizard_client = fliclib.FlicClient("0.0.0.0")
 
 	# db_sw_deamon = sqlite3.connect('../bin/armv6l/flicd.sqlite.db')
 	# db_sw_flicpi =  sqlite3.connect('flicpi.db')
