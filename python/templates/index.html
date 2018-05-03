@@ -98,7 +98,7 @@
 
         <!-- DISTURBANCE HISTORY -->
 
-        <br><br>
+        <br>
 
         <div class="card">
             <div class="card-content">
@@ -119,7 +119,7 @@
                                 <td>{{ row.timestamp }}</td>
                                 <td>{{ row.bdAddr }}</td>
                                 <td>{{ row.user }}</td>
-                                <td>{{ row.disruption }}</td>
+                                <td>{{ row.disturbance }}</td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -194,9 +194,9 @@
             str += ('<td>' + String(data[i]['state']) + '</td>')
 
     		if(String(data[i]['state']) == 'true'){
-    			str += ('<td class="current_disruption active" disruption_start="' + String(data[i]['disruption_start']) + '"></td>');
+    			str += ('<td class="current_disturbance active" disturbance_start="' + String(data[i]['disturbance_start']) + '"></td>');
     		}else{
-    			str += ('<td class="current_disruption"></td>');
+    			str += ('<td class="current_disturbance"></td>');
     		}
     	
     		str += ('<td class="">' + secs_to_string(data[i]['daily_total']) + '</td>')
@@ -210,11 +210,11 @@
     });
 
     var counter = setInterval(function() {
-    	var $rows = $(state_tablebody).find('td.current_disruption')
+    	var $rows = $(state_tablebody).find('td.current_disturbance')
 
     	$rows.each(function(index, value){
     		if($(this).hasClass('active')){
-	    		var t = new Date($(this).attr('disruption_start'));
+	    		var t = new Date($(this).attr('disturbance_start'));
 	    		var t_change = Math.floor((Date.now() - t) / 1000);
 	    		
 	    		if(t_change >= 60){
