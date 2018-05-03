@@ -154,7 +154,9 @@ def get_graph_history():
 			n += 2
 			day = date.today() - timedelta(days = n)
 
+		
 		day_str = str(day)
+		print('this day', day_str)
 
 		row =[day_str]
 
