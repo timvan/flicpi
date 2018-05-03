@@ -356,6 +356,8 @@
 
     socket.on('new disturbance', function(data){
 
+        var str = '';
+
         str += '<tr>';
         str += ('<td>' + data['timestamp'] + '</td>');
         str += ('<td>' + data['bdAddr'] + '</td>');
