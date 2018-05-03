@@ -17,6 +17,9 @@ eventlet.monkey_patch()
 global DEVICES
 DEVICES = []
 
+
+host = "0.0.0.0"
+
 class Device():
 	def __init__(self, bdAddr, user, colour):
 		self.bdAddr = bdAddr
@@ -258,7 +261,7 @@ def background_thread():
 
 	print("Running T...")
 
-	client = fliclib.FlicClient("0.0.0.0")
+	client = fliclib.FlicClient(host)
 
 	# flicpi.db .event_log: (timestamp TEXT, bdAddr TEXT, status INTEGER)
 	# flicpi.db .disturbances: (timestamp TEXT, bdADdr TEXT, disturbance INTEGER)
@@ -375,7 +378,7 @@ def new_scan_wizard_thread():
 	print(msg)
 	socketio.emit('scan wizard', msg)
 
-	wizard_client = fliclib.FlicClient("0.0.0.0")
+	wizard_client = fliclib.FlicClient(host)
 
 	# db_sw_deamon = sqlite3.connect('../bin/armv6l/flicd.sqlite.db')
 	# db_sw_flicpi =  sqlite3.connect('flicpi.db')
