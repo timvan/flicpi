@@ -148,25 +148,36 @@ def get_graph_history():
 	for i in range(days_to_graph):
 		n += i
 
-		if (date.today() - timedelta(days = n)).weekday() in [5,6]:
+		day = date.today() - timedelta(days = n)
+
+
+		if day.weekday() in [5,6]:
 			n += 2
 
-		day_str = str(date.today() - timedelta(days = n))
+		day_str = str(day)
 
 		row =[day_str]
 
 		for i, device in enumerate(devs):
 			user = get_user(device[0])
-			row.append(math.floor(get_day_disturbance_by_user(user, -n) / 60.0))
+
+			d1 = str(day)
+			d2 = str(day + timedelta(days = 1))
+			print(d1, d2)
+			
+			t = get_day_disturbance_by_user(user, d1, d2)
+			row.append(math.floor( t / 60.0))
 				
 		rows.append(row)
 
 	print(rows)
 	socketio.emit('graph', rows)
 
-def get_day_disturbance_by_user(user, day):
+def get_total_disturbance_between_days_by_user(user, day1, day2):
 
-	total =  db_flicpi.execute("SELECT SUM(disturbance) FROM disturbances WHERE user=? AND timestamp > datetime('now', 'localtime', 'start of day', '? day') AND timestamp <= datetime('now', 'localtime', 'start of day', '? day') ", (user, day, day + 1)).fetchone()
+	str = "SELECT SUM(disturbance) FROM disturbances WHERE user=" + user + ""
+
+	total =  db_flicpi.execute("SELECT SUM(disturbance) FROM disturbances WHERE user=? AND timestamp BETWEEN ? AND ?", (user, day1, day2)).fetchone()
 
 	return total[0]
 
