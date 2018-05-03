@@ -141,6 +141,9 @@ def get_connected_devices():
 def get_graph_history():
 	days_to_graph = 10
 	devs = db_flicdeamon.execute("SELECT bdaddr, color FROM buttons").fetchall()
+
+	users = [get_user(device[0]) for device in devs]
+
 	rows = []
 
 	n = 0
@@ -160,7 +163,7 @@ def get_graph_history():
 		row =[day_str]
 
 		for i, device in enumerate(devs):
-			user = get_user(device[0])
+			user = users[i]
 
 			d1 = str(day)
 			d2 = str(day + timedelta(days = 1))
@@ -176,7 +179,7 @@ def get_graph_history():
 		n += 1
 
 	print(rows)
-	socketio.emit('graph', [rows, devs])
+	socketio.emit('graph', [rows, users])
 
 def get_total_disturbance_between_days_by_user(user, day1, day2):
 

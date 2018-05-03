@@ -384,7 +384,7 @@
 
 
     var data_in = [];
-    var devices = [];
+    var users = [];
 
     google.charts.load('current', {packages: ['corechart', 'bar']});
     google.charts.setOnLoadCallback(drawGraph);
@@ -395,8 +395,8 @@
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'Date');
 
-        for (var i = 0; i < devices.length; i++){
-            data.addColumn('number', devices[i][0]);
+        for (var i = 0; i < users.length; i++){
+            data.addColumn('number', users[i]);
         }
         data.addRows(data_in.reverse());
 
@@ -415,7 +415,7 @@
     socket.on('graph', function(msg){
         // console.log(raw_data);
         data_in = msg[0];
-        devices = msg[1];
+        users = msg[1];
         console.log('Graph been called...')
         google.charts.load('current', {packages: ['corechart', 'bar']});
         google.charts.setOnLoadCallback(drawGraph);
