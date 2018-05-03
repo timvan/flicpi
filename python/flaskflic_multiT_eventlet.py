@@ -52,6 +52,7 @@ def index():
 			'disturbance': secs_to_string(row[3]),
 			})
 
+	get_graph_history()
 	return render_template('index.html', history = history)
 
 
@@ -136,6 +137,50 @@ def get_connected_devices():
 	socketio.emit('got connected devices', table)
 
 
+
+def get_graph_history():
+	days_to_graph = 10
+	devs = db_flicdeamon.execute("SELECT bdaddr, color FROM buttons").fetchall()
+	rows = []
+
+	n = 0
+
+	for i in range(days_to_graph):
+		n += i
+
+		if (datetime.date.today() - datetime.timedelta(days = n)).weekday() in [5,6]:
+			n += 2
+
+		day_str = str(datetime.date.today() - datetime.timedelta(days = n))
+
+		row =[day_str]
+
+		for i, device in enumerate(devs):
+			user = get_user(device[0])
+			row.append(math.floor(get_day_disturbance_by_user(user, -n) / 60.0))
+				
+		rows.append(row)
+
+	print(rows)
+	socketio.emit('graph', rows)
+
+def get_day_disturbance_by_user(user, day):
+
+	total =  db_flicpi.execute("SELECT SUM(disturbance) FROM disturbances WHERE user=? AND timestamp > datetime('now', 'localtime', 'start of day', '? day') AND timestamp <= datetime('now', 'localtime', 'start of day', '? day') ", (user, day, day + 1)).fetchone()
+
+	return total[0]
+
+
+
+def get_user(bdAddr):
+
+	user = db_flicpi.execute("SELECT user FROM users WHERE bdAddr = ? ORDER BY ROWID DESC LIMIT 1", (bdAddr,)).fetchone()
+	if user is not None:
+		user = user[0]
+	return user
+
+
+
 @socketio.on('scan wizard insert')
 def scan_wizard_succes(new_user):
 
@@ -186,7 +231,6 @@ def secs_to_string(secs):
 	rendered_time = " ".join(lst)
 
 	return rendered_time
-
 
 # --------------------- FLIC THREAD ---------------------
 

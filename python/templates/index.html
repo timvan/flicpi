@@ -370,6 +370,13 @@
     });
 
 
+    // ----- GRAPH -----
+
+    socket.on('graph', function(data){
+        console.log(data);
+    })
+
+
     // ----- HELPERS -----
 
     function secs_to_string(secs) {
