@@ -383,29 +383,31 @@
 
 
 
+    var data_in;
 
     socket.on('graph', function(raw_data){
         console.log(raw_data);
-
-        google.charts.load('current', {packages: ['corechart', 'bar']});
-        google.charts.setOnLoadCallback(drawGraph);
-        
-        function drawGraph() {
-            var data = new google.visualization.DataTable();
-            data.addColumn('string', 'Date');
-            data.addColumn('number', 'User1');
-            data.addColumn('number', 'User2');
-            data.addColumn('number', 'User3');
-
-            data.addRows(raw_data);
-
-            var options = {};
-
-            var bar_graph = new google.charts.Bar(document.getElementById('graph'));
-            bar_graph.draw(data, options);
-            console.log(data, options, bar_graph);
-        };
+        data_in = raw_data;
     });
+
+    google.charts.load('current', {packages: ['corechart', 'bar']});
+    google.charts.setOnLoadCallback(drawGraph);
+
+    function drawGraph() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Date');
+        data.addColumn('number', 'User1');
+        data.addColumn('number', 'User2');
+        data.addColumn('number', 'User3');
+
+        data.addRows(data_in);
+
+        var options = {};
+
+        var bar_graph = new google.charts.Bar(document.getElementById('graph'));
+        bar_graph.draw(data, options);
+        console.log(data, options, bar_graph);
+    };
 
     // ----- HELPERS -----
 
