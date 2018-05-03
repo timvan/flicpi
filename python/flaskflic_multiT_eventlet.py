@@ -181,6 +181,8 @@ def get_graph_history():
 	print(rows)
 	socketio.emit('graph', [rows, users])
 
+
+
 def get_total_disturbance_between_days_by_user(user, day1, day2):
 
 	str = "SELECT SUM(disturbance) FROM disturbances WHERE user=" + user + ""
@@ -213,10 +215,11 @@ def scan_wizard_succes(new_user):
 	c.execute("UPDATE users SET user = ?, slackhandle = ? WHERE ROWID = ?", (new_user['username'], new_user['slackhandle'], rowid[0]))
 	db_flicpi.commit()
 	update_state_tabe()
+	get_graph_history()
 
 
 @socketio.on('connected devices change')
-def connected_devies_change(data):
+def update_devices(data):
 
 	print("Making changes to connected devices... ", data)
 
@@ -225,6 +228,7 @@ def connected_devies_change(data):
 		db_flicpi.commit()
 
 	update_state_tabe()
+	get_graph_history()
 
 
 def secs_to_string(secs):
@@ -318,6 +322,7 @@ def background_thread():
 			new_entry['disturbance'] = secs_to_string(disturbance)
 
 			socketio.emit('new disturbance', new_entry)
+			get_graph_history()
 
 		else:
 			print(bdAddr, "is now disturbed...")
@@ -327,7 +332,6 @@ def background_thread():
 		db.commit()
 
 		update_state_tabe()
-		get_graph_history()
 		
 
 	def get_last(bdAddr):
