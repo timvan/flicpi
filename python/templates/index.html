@@ -383,15 +383,17 @@
 
 
 
-    var data_in;
+    var data_in = [];
 
     socket.on('graph', function(raw_data){
         console.log(raw_data);
         data_in = raw_data;
     });
 
+
     google.charts.load('current', {packages: ['corechart', 'bar']});
     google.charts.setOnLoadCallback(drawGraph);
+
 
     function drawGraph() {
         var data = new google.visualization.DataTable();
