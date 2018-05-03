@@ -145,7 +145,7 @@ def get_graph_history():
 
 	n = 0
 	for i in range(days_to_graph):
-		n += 1
+		
 
 		day = date.today() - timedelta(days = n)
 
@@ -172,6 +172,7 @@ def get_graph_history():
 				row.append(0)
 				
 		rows.append(row)
+		n += 1
 
 	print(rows)
 	socketio.emit('graph', rows)
