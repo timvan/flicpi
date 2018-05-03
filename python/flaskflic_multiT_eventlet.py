@@ -176,7 +176,7 @@ def get_graph_history():
 		n += 1
 
 	print(rows)
-	socketio.emit('graph', rows)
+	socketio.emit('graph', [rows, devs])
 
 def get_total_disturbance_between_days_by_user(user, day1, day2):
 

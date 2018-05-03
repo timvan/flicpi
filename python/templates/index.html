@@ -384,19 +384,20 @@
 
 
     var data_in = [];
-
+    var devices = [];
 
     google.charts.load('current', {packages: ['corechart', 'bar']});
     google.charts.setOnLoadCallback(drawGraph);
 
 
     function drawGraph() {
+
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'Date');
-        data.addColumn('number', 'User1');
-        data.addColumn('number', 'User2');
-        data.addColumn('number', 'User3');
 
+        for (var i = 0; i < devs.length; i++){
+            data.addColumn('number', devices[i][0]);
+        }
         data.addRows(data_in)
 
         // for(var i = 0; i < data_in.length; i++){
@@ -411,9 +412,10 @@
         console.log(data, options, bar_graph);
     };
 
-    socket.on('graph', function(raw_data){
+    socket.on('graph', function(msg){
         // console.log(raw_data);
-        data_in = raw_data;
+        data_in = msg[0];
+        devices = msg[1];
         console.log('Graph been called...')
         google.charts.load('current', {packages: ['corechart', 'bar']});
         google.charts.setOnLoadCallback(drawGraph);
