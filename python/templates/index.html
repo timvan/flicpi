@@ -385,14 +385,6 @@
 
     var data_in = [];
 
-    socket.on('graph', function(raw_data){
-        console.log(raw_data);
-        data_in = raw_data;
-        console.log('Graph been called...')
-        google.charts.load('current', {packages: ['corechart', 'bar']});
-        google.charts.setOnLoadCallback(drawGraph);
-    });
-
 
     google.charts.load('current', {packages: ['corechart', 'bar']});
     google.charts.setOnLoadCallback(drawGraph);
@@ -417,6 +409,15 @@
         bar_graph.draw(data, options);
         console.log(data, options, bar_graph);
     };
+
+    socket.on('graph', function(raw_data){
+        console.log(raw_data);
+        data_in = raw_data;
+        console.log('Graph been called...')
+        google.charts.load('current', {packages: ['corechart', 'bar']});
+        google.charts.setOnLoadCallback(drawGraph);
+    });
+
 
     // ----- HELPERS -----
 
