@@ -204,7 +204,7 @@
             str += ('<td>' + String(data[i]['state']) + '</td>')
 
     		if(String(data[i]['state']) == 'true'){
-    			str += ('<td class="current_disturbance active" disturbance_start="' + String(new Date) + '"></td>');
+    			str += ('<td class="current_disturbance active" disturbance_start="' + String(data[i]['disturbance_start']) + '"></td>');
     		}else{
     			str += ('<td class="current_disturbance"></td>');
     		}
@@ -305,9 +305,10 @@
     open_connected_devices.onclick = function() {
         console.log('Getting connected devices..')
         socket.emit('get connected devices')
-    };
+    }
 
     $connected_devices_tablebody = $('#connected_devices_tablebody');
+
     $connectedDevicesForm = $('#connectedDevicesForm');
 
     socket.on('got connected devices', function(data){
