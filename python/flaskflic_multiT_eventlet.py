@@ -186,8 +186,6 @@ def get_graph_history():
 
 def get_total_disturbance_between_days_by_user(user, day1, day2):
 
-	str = "SELECT SUM(disturbance) FROM disturbances WHERE user=" + user + ""
-
 	total =  db_flicpi.execute("SELECT SUM(disturbance) FROM disturbances WHERE user=? AND timestamp BETWEEN ? AND ?", (user, day1, day2)).fetchone()
 
 	return total[0]
