@@ -113,29 +113,33 @@
         <div class="card">
             <div class="card-content">
                 <div class="card-title">Disruption History</div>
-                <table id="history_table">
-                    <thead>
-                        <tr>
-                            <!-- <th>bdAddr</th> -->
-                            <th>key</th>
-                            <th>Timestamp</th>
-                            <th>bdAddr</th>
-                            <th>User</th>
-                            <!-- <th>Colour</th> -->
-                            <th>Disruption</th>
-                    </thead>
-                    <tbody id="history_tablebody">
-                        {% for row in history %}
+                <form id="history_table_delete_rows_form">
+                    <table id="history_table">
+                        <thead>
                             <tr>
-                                <td>{{ row.key }}</td>
-                                <td>{{ row.timestamp }}</td>
-                                <td>{{ row.bdAddr }}</td>
-                                <td>{{ row.user }}</td>
-                                <td>{{ row.session_length_rendered }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                                <!-- <th>bdAddr</th> -->
+                                <th></th>
+                                <th>Key</th>
+                                <th>Timestamp</th>
+                                <th>bdAddr</th>
+                                <th>User</th>
+                                <!-- <th>Colour</th> -->
+                                <th>Disruption</th>
+                        </thead>
+                        <tbody id="history_tablebody">
+                            {% for row in history %}
+                                <tr>
+                                    <td><input type="checkbox" class="filled-in" checked="" /></td>
+                                    <td class="key">{{ row.key }}</td>
+                                    <td>{{ row.timestamp }}</td>
+                                    <td>{{ row.bdAddr }}</td>
+                                    <td>{{ row.user }}</td>
+                                    <td>{{ row.session_length_rendered }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </form>
             </div>
         </div>       
 
@@ -371,7 +375,8 @@
         var str = '';
 
         str += '<tr>';
-        str += ('<td>' + data['key'] + '</td>')
+        str += '<td><input type="checkbox" class="filled-in" checked="" /></td>'
+        str += ('<td class="key">' + data['key'] + '</td>')
         str += ('<td>' + data['timestamp'] + '</td>');
         str += ('<td>' + data['bdAddr'] + '</td>');
         str += ('<td>' + data['user'] + '</td>');
@@ -379,8 +384,15 @@
         str += '</tr>';
 
         $('#history_tablebody').prepend(str);
-
     });
+
+
+    $history_table_delete_rows_form = $('#history_table_delete_rows_form');
+
+    $history_table_delete_rows_form.submit(function(e){
+        e.preventDefault();
+        console.log('Submitted delete rows..');
+    })
 
     // ----- GRAPH -----
 
