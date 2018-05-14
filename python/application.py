@@ -30,6 +30,57 @@ db_flicpi =  sqlite3.connect('flicpi.db')
 @app.route('/')
 def index():
 
+	history = get_session_history()
+	# get_graph_history()
+
+	return render_template('index.html', history = history)
+
+
+
+def get_graph_history():
+	days_to_graph = 10
+	devs = db_flicdeamon.execute("SELECT bdaddr, color FROM buttons").fetchall()
+
+	users = [[get_user(device[0]), device[1]] for device in devs]
+
+	rows = []
+
+	n = 0
+	for i in range(days_to_graph):
+		
+
+		day = date.today() - timedelta(days = n)
+
+		
+		if day.weekday() in [5,6]:
+			n += 2
+			day = date.today() - timedelta(days = n)
+
+		
+		day_str = str(day)
+
+		row =[day_str]
+
+		for i, device in enumerate(devs):
+			user = users[i][0]
+
+			d1 = str(day)
+			d2 = str(day + timedelta(days = 1))
+
+			t = get_total_session_length_between_days_by_user(user, d1, d2)
+
+			if t:
+				row.append(math.floor( t / 60.0))
+			else:
+				row.append(0)
+				
+		rows.append(row)
+		n += 1
+
+	# print(rows)
+	socketio.emit('graph', [rows, users])
+
+def get_session_history():
 	history = []
 	rows = db_flicpi.execute("SELECT key, timestamp, bdAddr, user, session_length FROM sessions ORDER BY timestamp DESC").fetchall()
 
@@ -41,11 +92,9 @@ def index():
 			'user': row[3],
 			'session_length': row[4],
 			'session_length_rendered': secs_to_string(row[4]),
-			})
+		})
 
-	get_graph_history()
-
-	return render_template('index.html', history = history)
+	return history
 
 
 @socketio.on('page loaded')
@@ -137,48 +186,6 @@ def get_connected_devices():
 	socketio.emit('got connected devices', table)
 
 
-def get_graph_history():
-	days_to_graph = 10
-	devs = db_flicdeamon.execute("SELECT bdaddr, color FROM buttons").fetchall()
-
-	users = [[get_user(device[0]), device[1]] for device in devs]
-
-	rows = []
-
-	n = 0
-	for i in range(days_to_graph):
-		
-
-		day = date.today() - timedelta(days = n)
-
-		
-		if day.weekday() in [5,6]:
-			n += 2
-			day = date.today() - timedelta(days = n)
-
-		
-		day_str = str(day)
-
-		row =[day_str]
-
-		for i, device in enumerate(devs):
-			user = users[i][0]
-
-			d1 = str(day)
-			d2 = str(day + timedelta(days = 1))
-
-			t = get_total_session_length_between_days_by_user(user, d1, d2)
-
-			if t:
-				row.append(math.floor( t / 60.0))
-			else:
-				row.append(0)
-				
-		rows.append(row)
-		n += 1
-
-	# print(rows)
-	socketio.emit('graph', [rows, users])
 
 
 def get_total_session_length_between_days_by_user(user, day1, day2):
