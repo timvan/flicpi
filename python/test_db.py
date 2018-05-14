@@ -17,5 +17,9 @@ rowid = db_flicpi.execute("SELECT ROWID FROM users WHERE bdAddr = ? ORDER BY ROW
 
 user = db_flicpi.execute("SELECT user FROM users WHERE bdAddr = ? ORDER BY ROWID DESC LIMIT 1", (bdAddr,)).fetchone()
 
-print(type(user))
-print(user)
+data = db_flicpi.execute("SELECT * FROM event_log").fetchall()
+
+
+
+print(type(data))
+print(data)

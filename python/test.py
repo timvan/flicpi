@@ -56,17 +56,35 @@ def get_total_disturbance(bdAddr):
 
 def get_users():
 
-	rows = db.execute("SELECT timestamp, bdAddr FROM event_log").fetchall()
+	c = db.cursor()
+	c.execute("SELECT timestamp, bdAddr FROM event_log")
+	rows = c.fetchone()
+	c.close()
 
-	for row in rows:
+	print(rows)
+	# for row in rows:
 
-		print(row[0], row[1])
+	# 	print(row[0], row[1])
+
+def get_users2():
+
+	c = db.cursor()
+	rows = c.execute("SELECT timestamp, bdAddr FROM event_log LIMIT 1").fetchone()
 
 
+	print('2', rows[0])
+	# for row in rows:
+
+	# 	print(row[0], row[1])
 
 
 
 get_users()
+get_users2()
+get_users()
+get_users2()
+get_users()
+
 
 
 
