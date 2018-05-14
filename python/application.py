@@ -79,8 +79,8 @@ def delete_history():
 	values = request.form.getlist('key')
 
 	for value in values:
-		db.execute("DELETE FROM sessions WHERE key = ?", (value,))
-		
+		db.execute("DELETE FROM sessions WHERE key = ?", (int(value),))
+
 
 	return redirect(url_for('index'))
 
