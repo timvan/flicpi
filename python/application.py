@@ -76,8 +76,8 @@ def update_state_tabe():
 def delete_history():
 	print('at delete history')
 	
-	print(request.args)
-	for key, value in request.args:
+	print(request.form.getlist('key'))
+	for key, value in request.form:
 		# print(request.form[value])
 		print('v:', value)
 		print('k:', key)
