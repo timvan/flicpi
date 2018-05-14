@@ -130,7 +130,7 @@
                         </thead>
                         <tbody id="history_tablebody">
                             {% for row in history %}
-                                <tr>
+                                <tr id="historyRow{{ row.key }}">
                                     <td><label for="checkbox{{ row.key }}"><input type="checkbox" class="filled-in" id="checkbox{{ row.key }}" value="{{ row.key }}" name="key"/><span style="height: 15px; padding-left: 15px;"></span></label></td>
                                     <td class="key">{{ row.key }}</td>
                                     <td>{{ row.timestamp }}</td>
@@ -381,7 +381,7 @@
 
         var str = '';
 
-        str += '<tr>';
+        str += '<tr id="historyRow' + data['key'] + '">';
         str += '<td><label for="checkbox' + data['key'] + '"><input type="checkbox" class="filled-in" id="checkbox' + data['key'] + '" value="' + data['key'] + '" name="key"/><span style="height: 15px; padding-left: 15px;"></span></label></td>';
         str += ('<td class="key">' + data['key'] + '</td>')
         str += ('<td>' + data['timestamp'] + '</td>');
@@ -392,6 +392,14 @@
 
         $('#history_tablebody').prepend(str);
     });
+
+    socket.on('delete history', function(data){
+
+        for(var i = 0; i < data.length; i++){
+            var id = '#historyRow' + String(data[i]);
+            $(id).remove()
+        }
+    })
 
 
     // ----- GRAPH -----
