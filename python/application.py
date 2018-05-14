@@ -31,7 +31,7 @@ db_flicpi =  sqlite3.connect('flicpi.db')
 def index():
 
 	history = []
-	rows = db_flicpi.execute("SELECT (key, timestamp, bdAddr, user, session_length) FROM sessions ORDER BY timestamp DESC").fetchall()
+	rows = db_flicpi.execute("SELECT key, timestamp, bdAddr, user, session_length FROM sessions ORDER BY timestamp DESC").fetchall()
 
 	for row in rows:
 		history.append({
@@ -51,7 +51,7 @@ def index():
 def update_state_tabe():
 
 	table = []
-	devs = db_flicdeamon.execute("SELECT (bdAddr, color) FROM buttons").fetchall()
+	devs = db_flicdeamon.execute("SELECT bdAddr, color FROM buttons").fetchall()
 
 
 	for i, device in enumerate(devs):
@@ -78,7 +78,7 @@ def get_last_time_and_state(bdAddr):
 	Return the status and the time of log.
 	If does not exist return False and datetime.now().
 	"""
-	row = db_flicpi.execute("SELECT (timestamp, status) FROM events WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", (bdAddr, )).fetchone()
+	row = db_flicpi.execute("SELECT timestamp, status FROM events WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", (bdAddr, )).fetchone()
 	# print('1[get_last_time_and_state]', row)
 
 	if row is not None:
@@ -109,7 +109,7 @@ def get_connected_devices():
 	print('getting connected devices..')
 	table = []
 
-	devs = db_flicdeamon.execute("SELECT (bdaddr, color) FROM buttons").fetchall()
+	devs = db_flicdeamon.execute("SELECT bdaddr, color FROM buttons").fetchall()
 
 	for i, device in enumerate(devs):
 		row = {
@@ -125,7 +125,7 @@ def get_connected_devices():
 
 def get_graph_history():
 	days_to_graph = 10
-	devs = db_flicdeamon.execute("SELECT (bdaddr, color) FROM buttons").fetchall()
+	devs = db_flicdeamon.execute("SELECT bdaddr, color FROM buttons").fetchall()
 
 	users = [[get_user(device[0]), device[1]] for device in devs]
 
@@ -321,7 +321,7 @@ def background_thread():
 		If does not exist return False and datetime.now().
 		"""
 
-		row = db.execute("SELECT (timestamp, status) FROM events WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", (bdAddr, )).fetchone()		
+		row = db.execute("SELECT timestamp, status FROM events WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", (bdAddr, )).fetchone()		
 		# print("2.1[get_last]", row)
 
 		if row is not None:
