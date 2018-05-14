@@ -77,8 +77,8 @@ def delete_history():
 	print('at delete history')
 	
 	print(request.form)
-	for value in request.form:
-		print(value[1])
+	for key, value in request.form:
+		print(value)
 
 	return redirect(url_for('index'))
 
