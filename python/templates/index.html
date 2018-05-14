@@ -129,7 +129,7 @@
                         <tbody id="history_tablebody">
                             {% for row in history %}
                                 <tr>
-                                    <td><label><input type="checkbox" class="filled-in" checked=""/><span style="height: 15px; padding-left: 15px;"></span></label></td>
+                                    <td><label><input type="checkbox" class="filled-in"/><span style="height: 15px; padding-left: 15px;"></span></label></td>
                                     <td class="key">{{ row.key }}</td>
                                     <td>{{ row.timestamp }}</td>
                                     <td>{{ row.bdAddr }}</td>
@@ -375,7 +375,7 @@
         var str = '';
 
         str += '<tr>';
-        str += '<td><label><input type="checkbox" class="filled-in" checked=""/><span style="height: 15px; padding-left: 15px;"></span></label></td>';
+        str += '<td><label><input type="checkbox" class="filled-in"/><span style="height: 15px; padding-left: 15px;"></span></label></td>';
         str += ('<td class="key">' + data['key'] + '</td>')
         str += ('<td>' + data['timestamp'] + '</td>');
         str += ('<td>' + data['bdAddr'] + '</td>');
