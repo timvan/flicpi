@@ -80,6 +80,7 @@ def get_graph_history():
 	# print(rows)
 	socketio.emit('graph', [rows, users])
 
+
 def get_session_history():
 	history = []
 	rows = db_flicpi.execute("SELECT key, timestamp, bdAddr, user, session_length FROM sessions ORDER BY timestamp DESC").fetchall()
@@ -129,10 +130,10 @@ def delete_history():
 
 	for value in values:
 		db_flicpi.execute("DELETE FROM sessions WHERE key = ?", (int(value),))
+		db_flicpi.commit()
 
 
 	return redirect(url_for('index'))
-
 
 
 def get_last_time_and_state(bdAddr):
@@ -206,9 +207,6 @@ def get_user(bdAddr):
 @socketio.on('scan wizard insert')
 def scan_wizard_succes(new_user):
 
-
-	# db.execute("INSERT INTO users VALUES (?, ?, ?)", (bdAddr, username, slackhandle))
-	# db.commit()
 	print('scan wizard insert', new_user)
 	rowid = db_flicpi.execute("SELECT ROWID FROM users WHERE bdAddr = ? ORDER BY ROWID DESC LIMIT 1", (new_user['bdAddr'], )).fetchone()
 
@@ -262,7 +260,7 @@ def background_thread():
 	print("Running T...")
 
 	client = fliclib.FlicClient(host)
-	db = sqlite3.connect('flicpi.db')
+	# db = sqlite3.connect('flicpi.db')
 
 
 	def got_button(bd_addr):
@@ -303,7 +301,7 @@ def background_thread():
 
 			
 
-			user = db.execute("SELECT user FROM users WHERE bdAddr = ? ORDER BY ROWID DESC LIMIT 1", (bdAddr,)).fetchone()
+			user = db_flicpi.execute("SELECT user FROM users WHERE bdAddr = ? ORDER BY ROWID DESC LIMIT 1", (bdAddr,)).fetchone()
 			
 			if user is not None:
 				user = user[0]
@@ -315,10 +313,10 @@ def background_thread():
 				'session_length': session_length,
 			}
 
-			cur = db.cursor()
+			cur = db_flicpi.cursor()
 			cur.execute("INSERT INTO sessions (timestamp, bdADdr, user, session_length) VALUES (?, ?, ?, ?)", (new_entry['timestamp'], new_entry['bdAddr'], new_entry['user'], new_entry['session_length']))
 			new_entry['key'] = cur.execute("SELECT key FROM sessions ORDER BY ROWID DESC LIMIT 1").fetchone()[0]
-			db.commit()
+			db_flicpi.commit()
 
 			new_entry['session_length_rendered'] = secs_to_string(session_length)
 
@@ -328,8 +326,8 @@ def background_thread():
 		else:
 			print(bdAddr, "session starting...")
 
-		db.execute("INSERT INTO events (timestamp, bdAddr, status) VALUES (?, ?, ?)", (datetime.now(), bdAddr, not status, ))
-		db.commit()
+		db_flicpi.execute("INSERT INTO events (timestamp, bdAddr, status) VALUES (?, ?, ?)", (datetime.now(), bdAddr, not status, ))
+		db_flicpi.commit()
 
 		update_state_tabe()
 		
@@ -341,29 +339,12 @@ def background_thread():
 		If does not exist return False and datetime.now().
 		"""
 
-		row = db.execute("SELECT timestamp, status FROM events WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", (bdAddr, )).fetchone()		
-		# print("2.1[get_last]", row)
+		row = db_flicpi.execute("SELECT timestamp, status FROM events WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", (bdAddr, )).fetchone()		
 
 		if row is not None:
 			return dateutil.parser.parse(row[0]), bool(row[1])
 
 		return (datetime.now(), False)
-
-
-	# def get_total_session_length(bdAddr):
-	# 	"""
-	# 	Sum total session_length for this bdAddr in sessions.
-	# 	Return rounded total.
-	# 	"""
-
-	# 	user = db.execute("SELECT user FROM users WHERE bdAddr = ? ORDER BY ROWID DESC LIMIT 1", (bdAddr,)).fetchone()
-
-	# 	if user is not None:
-	# 		user = user[0]
-
-	# 	total = db.execute("SELECT SUM(session_length) FROM sessions WHERE uesr=?", (user,)).fetchone()
-	# 	return round(total[0], 0)
-
 
 	client.get_info(got_info)
 	client.on_new_verified_button = got_button
