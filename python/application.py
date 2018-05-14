@@ -71,7 +71,7 @@ def update_state_tabe():
 	
 	socketio.emit('update state table', table)
 
-@app.route('/deleterows')
+@app.route('/delete_history')
 def delete_history(data):
 	print('at delete history')
 	print(data)
