@@ -124,11 +124,11 @@ def update_state_tabe():
 
 @app.route('/delete_history', methods=["POST"])
 def delete_history():
-	print('at delete history')
+	
 	
 	values = request.form.getlist('key')
-
 	for value in values:
+		print('Deleting history key:', value)
 		db_flicpi.execute("DELETE FROM sessions WHERE key = ?", (int(value),))
 		db_flicpi.commit()
 
