@@ -280,9 +280,9 @@ def background_thread():
 			session_length = (datetime.now() - timestamp).total_seconds()
 			print(bdAddr + " session lasted:" + str(session_length) + '.')
 
-			cur = db.cursor()
+			
 
-			user = cur.execute("SELECT user FROM users WHERE bdAddr = ? ORDER BY ROWID DESC LIMIT 1", (bdAddr,)).fetchone()
+			user = db.execute("SELECT user FROM users WHERE bdAddr = ? ORDER BY ROWID DESC LIMIT 1", (bdAddr,)).fetchone()
 			
 			if user is not None:
 				user = user[0]
@@ -294,10 +294,11 @@ def background_thread():
 				'session_length': session_length,
 			}
 
+			cur = db.cursor()
 			cur.execute("INSERT INTO sessions (timestamp, bdADdr, user, session_length) VALUES (?, ?, ?, ?)", (new_entry['timestamp'], new_entry['bdAddr'], new_entry['user'], new_entry['session_length']))
-			db.commit()
-
 			new_entry['key'] = cur.execute("SELECT key FROM sessions ORDER BY ROWID DESC LIMIT 1").fetchone()[0]
+			db.commit()
+			
 			new_entry['session_length_rendered'] = secs_to_string(session_length)
 
 			socketio.emit('new session', new_entry)
