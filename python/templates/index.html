@@ -186,8 +186,12 @@
 
     socket.on('connect', function() {
     	$socket_status.html('Connected');
-        socket.emit('page loaded');
+        // socket.emit('page loaded');
     });
+
+    $(document).ready(function(){
+        socket.emit('page loaded');
+    })
 
     socket.on('disconnect', function() {
     	$socket_status.html('Disconnected');
