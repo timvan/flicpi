@@ -44,6 +44,7 @@ def index():
 			})
 
 	get_graph_history()
+	
 	return render_template('index.html', history = history)
 
 
@@ -75,6 +76,7 @@ def update_state_tabe():
 def delete_history():
 	print('at delete history')
 	print(request.form)
+	return redirect(url_for('index'))
 
 
 
