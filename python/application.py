@@ -35,7 +35,7 @@ def index():
 
 	for row in rows:
 		history.append({
-			'key': row[0]
+			'key': row[0],
 			'timestamp': row[1],
 			'bdAddr': row[2],
 			'user': row[3],
