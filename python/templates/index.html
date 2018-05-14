@@ -114,6 +114,8 @@
             <div class="card-content">
                 <div class="card-title">Disruption History</div>
                 <form id="history_table_delete_rows_form">
+                    <!-- <a class="btn right" type="submit"><i class="material-icons">delete</i></a> -->
+                    <input type="submit" value="delete" class="btn right" action="/deleterows">
                     <table id="history_table">
                         <thead>
                             <tr>
@@ -129,7 +131,7 @@
                         <tbody id="history_tablebody">
                             {% for row in history %}
                                 <tr>
-                                    <td><label><input type="checkbox" class="filled-in"/><span style="height: 15px; padding-left: 15px;"></span></label></td>
+                                    <td><label for="checkbox{{ row.key }}"><input type="checkbox" class="filled-in" id="checkbox{{ row.key }}" value="{{ row.key }}" name="key"/><span style="height: 15px; padding-left: 15px;"></span></label></td>
                                     <td class="key">{{ row.key }}</td>
                                     <td>{{ row.timestamp }}</td>
                                     <td>{{ row.bdAddr }}</td>
@@ -387,12 +389,12 @@
     });
 
 
-    $history_table_delete_rows_form = $('#history_table_delete_rows_form');
+    // $history_table_delete_rows_form = $('#history_table_delete_rows_form');
 
-    $history_table_delete_rows_form.submit(function(e){
-        e.preventDefault();
-        console.log('Submitted delete rows..');
-    })
+    // $history_table_delete_rows_form.submit(function(e){
+    //     e.preventDefault();
+    //     console.log('Submitted delete rows..');
+    // })
 
     // ----- GRAPH -----
 

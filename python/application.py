@@ -71,6 +71,11 @@ def update_state_tabe():
 	
 	socketio.emit('update state table', table)
 
+@app.route('/deleterows')
+def delete_history(data)
+	print(data)
+
+
 
 def get_last_time_and_state(bdAddr):
 	""" 
