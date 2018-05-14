@@ -191,9 +191,7 @@ def scan_wizard_succes(new_user):
 	print('scan wizard insert', new_user)
 	rowid = db_flicpi.execute("SELECT ROWID FROM users WHERE bdAddr = ? ORDER BY ROWID DESC LIMIT 1", (new_user['bdAddr'], )).fetchone()
 
-	c = db_flicpi.cursor()
-	c.execute("UPDATE users SET user = ?, slackhandle = ? WHERE ROWID = ?", (new_user['username'], new_user['slackhandle'], rowid[0]))
-	db_flicpi.commit()
+	db_flicpi.execute("UPDATE users SET user = ?, slackhandle = ? WHERE ROWID = ?", (new_user['username'], new_user['slackhandle'], rowid[0])).commit()
 	update_state_tabe()
 	get_graph_history()
 
@@ -297,7 +295,7 @@ def background_thread():
 			}
 
 			cur.execute("INSERT INTO sessions (timestamp, bdADdr, user, session_length) VALUES (?, ?, ?, ?)", (new_entry['timestamp'], new_entry['bdAddr'], new_entry['user'], new_entry['session_length']))
-			cur.commit()
+			db.commit()
 
 			new_entry['key'] = cur.execute("SELECT key FROM sessions ORDER BY ROWID DESC LIMIT 1").fetchone()[0]
 			new_entry['session_length_rendered'] = secs_to_string(session_length)
@@ -388,17 +386,13 @@ def new_scan_wizard_thread():
 
 		if result == fliclib.ScanWizardResult.WizardSuccess:
 			
-			c = db_flicpi.cursor()
-			c.execute("INSERT INTO users VALUES (?, ?, ?, ?)", (datetime.now(), bd_addr, None, None))
-			db_flicpi.commit()
+			db_flicpi.execute("INSERT INTO users VALUES (?, ?, ?, ?)", (datetime.now(), bd_addr, None, None)).commit()
 
 			msg = ("Your button is now ready. The bd addr is " + bd_addr + ".")
 			print(msg)
 			socketio.emit('scan wizard', msg)
 			
-			c = db_flicdeamon.cursor()
-			c.execute("SELECT color FROM buttons WHERE bdAddr = ?", (bd_addr, ))
-			color = c.fetchone()
+			color = db_flicdeamon.execute("SELECT color FROM buttons WHERE bdAddr = ?", (bd_addr, )).fetchone()
 			
 			data = {
 			 'bdAddr': bd_addr,
