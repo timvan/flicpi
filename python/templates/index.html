@@ -113,7 +113,7 @@
         <div class="card">
             <div class="card-content">
                 <div class="card-title">Disruption History</div>
-                <form id="history_table_delete_rows_form" action="{{ url_for('delete_history')}}">
+                <form id="history_table_delete_rows_form" action="{{ url_for('delete_history')}}" method="post">
                     <!-- <a class="btn right" type="submit"><i class="material-icons">delete</i></a> -->
                     <input type="submit" value="delete" class="btn right">
                     <table id="history_table">
