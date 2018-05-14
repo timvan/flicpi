@@ -377,7 +377,7 @@
         var str = '';
 
         str += '<tr>';
-        str += '<td><label><input type="checkbox" class="filled-in"/><span style="height: 15px; padding-left: 15px;"></span></label></td>';
+        str += '<td><label for="checkbox' + data['key'] + '"><input type="checkbox" class="filled-in" id="checkbox' + data['key'] + '" value="' + data['key'] + '" name="key"/><span style="height: 15px; padding-left: 15px;"></span></label></td>';
         str += ('<td class="key">' + data['key'] + '</td>')
         str += ('<td>' + data['timestamp'] + '</td>');
         str += ('<td>' + data['bdAddr'] + '</td>');
@@ -387,6 +387,11 @@
 
         $('#history_tablebody').prepend(str);
     });
+
+
+
+
+
 
 
     // $history_table_delete_rows_form = $('#history_table_delete_rows_form');
