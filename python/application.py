@@ -76,12 +76,11 @@ def update_state_tabe():
 def delete_history():
 	print('at delete history')
 	
-	print(request.form.getlist('key'))
-	for key, value in request.form:
-		# print(request.form[value])
-		print('v:', value)
-		print('k:', key)
+	values = request.form.getlist('key')
 
+	for value in values:
+		db.execute("DELETE FROM sessions WHERE key = ?", (value,))
+		
 
 	return redirect(url_for('index'))
 
