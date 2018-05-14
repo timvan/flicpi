@@ -36,7 +36,7 @@ def index():
 	return render_template('index.html', history = history)
 
 
-
+@socketio.on('page loaded')
 def get_graph_history():
 	days_to_graph = 10
 	devs = db_flicdeamon.execute("SELECT bdaddr, color FROM buttons").fetchall()
