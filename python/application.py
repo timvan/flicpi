@@ -36,29 +36,39 @@ def index():
 	return render_template('index.html', history = history)
 
 
+def get_session_history():
+	history = []
+	rows = db_flicpi.execute("SELECT key, timestamp, bdAddr, user, session_length FROM sessions ORDER BY timestamp DESC").fetchall()
+
+	for row in rows:
+		history.append({
+			'key': row[0],
+			'timestamp': row[1],
+			'bdAddr': row[2],
+			'user': row[3],
+			'session_length': row[4],
+			'session_length_rendered': secs_to_string(row[4]),
+		})
+
+	return history
+
+
 @socketio.on('page loaded')
 def get_graph_history():
 	days_to_graph = 10
 	devs = db_flicdeamon.execute("SELECT bdaddr, color FROM buttons").fetchall()
-
 	users = [[get_user(device[0]), device[1]] for device in devs]
-
 	rows = []
 
 	n = 0
 	for i in range(days_to_graph):
-		
-
 		day = date.today() - timedelta(days = n)
-
 		
 		if day.weekday() in [5,6]:
 			n += 2
 			day = date.today() - timedelta(days = n)
 
-		
 		day_str = str(day)
-
 		row =[day_str]
 
 		for i, device in enumerate(devs):
@@ -79,23 +89,6 @@ def get_graph_history():
 
 	# print(rows)
 	socketio.emit('graph', [rows, users])
-
-
-def get_session_history():
-	history = []
-	rows = db_flicpi.execute("SELECT key, timestamp, bdAddr, user, session_length FROM sessions ORDER BY timestamp DESC").fetchall()
-
-	for row in rows:
-		history.append({
-			'key': row[0],
-			'timestamp': row[1],
-			'bdAddr': row[2],
-			'user': row[3],
-			'session_length': row[4],
-			'session_length_rendered': secs_to_string(row[4]),
-		})
-
-	return history
 
 
 @socketio.on('page loaded')
@@ -185,8 +178,6 @@ def get_connected_devices():
 		table.append(row)
 
 	socketio.emit('got connected devices', table)
-
-
 
 
 def get_total_session_length_between_days_by_user(user, day1, day2):
