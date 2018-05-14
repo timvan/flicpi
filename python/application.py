@@ -14,21 +14,7 @@ import math
 import eventlet
 eventlet.monkey_patch()
 
-global DEVICES
-DEVICES = []
-
-
 host = "0.0.0.0"
-
-class Device():
-	def __init__(self, bdAddr, user, colour):
-		self.bdAddr = bdAddr
-		self.user = user
-		self.colour = colour
-		# self.status = False #<< is this going to lead to conflicting sources of truth
-
-	# def status_change(self):
-
 
 
 # --------------------- FLASK APP  ---------------------
@@ -45,14 +31,16 @@ db_flicpi =  sqlite3.connect('flicpi.db')
 def index():
 
 	history = []
-	rows = db_flicpi.execute("SELECT * FROM disturbances ORDER BY timestamp DESC").fetchall()
+	rows = db_flicpi.execute("SELECT (key, timestamp, bdAddr, user, session_length) FROM sessions ORDER BY timestamp DESC").fetchall()
 
 	for row in rows:
 		history.append({
-			'timestamp': row[0],
-			'bdAddr': row[1],
-			'user': row[2],
-			'disturbance': secs_to_string(row[3]),
+			'key': row[0]
+			'timestamp': row[1],
+			'bdAddr': row[2],
+			'user': row[3],
+			'session_length': row[4],
+			'session_length_rendered': secs_to_string(row[4]),
 			})
 
 	get_graph_history()
@@ -63,10 +51,7 @@ def index():
 def update_state_tabe():
 
 	table = []
-
-	c = db_flicdeamon.cursor()
-	c.execute("SELECT bdAddr, color FROM buttons")
-	devs = c.fetchall()
+	devs = db_flicdeamon.execute("SELECT (bdAddr, color) FROM buttons").fetchall()
 
 
 	for i, device in enumerate(devs):
@@ -77,7 +62,7 @@ def update_state_tabe():
 			'color': device[1],
 			'user': db_flicpi.execute("SELECT user FROM users WHERE bdAddr = ? ORDER BY ROWID DESC LIMIT 1", (device[0],)).fetchone(),
 			'state': state,
-			'disturbance_start': timestamp.ctime() if state else None,
+			'session_start': timestamp.ctime() if state else None,
 			'daily_total': daily_total if daily_total else 0,
 		}
 		table.append(row)
@@ -89,15 +74,15 @@ def update_state_tabe():
 
 def get_last_time_and_state(bdAddr):
 	""" 
-	Get the last entry of this bdAddr in event_log. 
+	Get the last entry of this bdAddr in events. 
 	Return the status and the time of log.
 	If does not exist return False and datetime.now().
 	"""
-	row = db_flicpi.execute("SELECT * FROM event_log WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", (bdAddr, )).fetchone()
+	row = db_flicpi.execute("SELECT (timestamp, status) FROM events WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", (bdAddr, )).fetchone()
 	# print('1[get_last_time_and_state]', row)
 
 	if row is not None:
-		return dateutil.parser.parse(row[0]), bool(row[2])
+		return dateutil.parser.parse(row[0]), bool(row[1])
 
 	return datetime.now(), False
 
@@ -108,7 +93,7 @@ def get_daily_total(bdAddr):
 	if user is not None:
 		user = user[0]
 
-	total =  db_flicpi.execute("SELECT SUM(disturbance) FROM disturbances WHERE user=? AND timestamp > datetime('now', 'localtime', 'start of day')", (user,)).fetchone()
+	total =  db_flicpi.execute("SELECT SUM(session_length) FROM sessions WHERE user=? AND timestamp > datetime('now', 'localtime', 'start of day')", (user,)).fetchone()
 
 	return total[0]
 
@@ -124,9 +109,7 @@ def get_connected_devices():
 	print('getting connected devices..')
 	table = []
 
-	c = db_flicdeamon.cursor()
-	c.execute("SELECT bdaddr, color FROM buttons")
-	devs = c.fetchall()
+	devs = db_flicdeamon.execute("SELECT (bdaddr, color) FROM buttons").fetchall()
 
 	for i, device in enumerate(devs):
 		row = {
@@ -142,7 +125,7 @@ def get_connected_devices():
 
 def get_graph_history():
 	days_to_graph = 10
-	devs = db_flicdeamon.execute("SELECT bdaddr, color FROM buttons").fetchall()
+	devs = db_flicdeamon.execute("SELECT (bdaddr, color) FROM buttons").fetchall()
 
 	users = [[get_user(device[0]), device[1]] for device in devs]
 
@@ -170,7 +153,7 @@ def get_graph_history():
 			d1 = str(day)
 			d2 = str(day + timedelta(days = 1))
 
-			t = get_total_disturbance_between_days_by_user(user, d1, d2)
+			t = get_total_session_length_between_days_by_user(user, d1, d2)
 
 			if t:
 				row.append(math.floor( t / 60.0))
@@ -184,9 +167,9 @@ def get_graph_history():
 	socketio.emit('graph', [rows, users])
 
 
-def get_total_disturbance_between_days_by_user(user, day1, day2):
+def get_total_session_length_between_days_by_user(user, day1, day2):
 
-	total =  db_flicpi.execute("SELECT SUM(disturbance) FROM disturbances WHERE user=? AND timestamp BETWEEN ? AND ?", (user, day1, day2)).fetchone()
+	total =  db_flicpi.execute("SELECT SUM(session_length) FROM sessions WHERE user=? AND timestamp BETWEEN ? AND ?", (user, day1, day2)).fetchone()
 
 	return total[0]
 
@@ -221,7 +204,7 @@ def update_devices(data):
 	print("Making changes to connected devices... ", data)
 
 	for change in data:
-		db_flicpi.execute("INSERT INTO users VALUES (?, ?, ?, ?)", (datetime.now(), change['bdAddr'], change['user'], change['slackhandle']))
+		db_flicpi.execute("INSERT INTO users (timestamp, bdAddr, user, slackhandle) VALUES (?, ?, ?, ?)", (datetime.now(), change['bdAddr'], change['user'], change['slackhandle']))
 		db_flicpi.commit()
 
 	update_state_tabe()
@@ -260,9 +243,6 @@ def background_thread():
 	print("Running T...")
 
 	client = fliclib.FlicClient(host)
-
-	# flicpi.db .event_log: (timestamp TEXT, bdAddr TEXT, status INTEGER)
-	# flicpi.db .disturbances: (timestamp TEXT, bdADdr TEXT, disturbance INTEGER)
 	db = sqlite3.connect('flicpi.db')
 
 
@@ -295,13 +275,16 @@ def background_thread():
 	def handle_single_click(bdAddr):
 
 
-		timestamp, disturbed = get_last(bdAddr)
+		timestamp, status = get_last(bdAddr)
 
 		
-		if disturbed:
-			disturbance = (datetime.now() - timestamp).total_seconds()
-			print(bdAddr + " was disturbed for " + str(disturbance) + '.')
-			user = db.execute("SELECT user FROM users WHERE bdAddr = ? ORDER BY ROWID DESC LIMIT 1", (bdAddr,)).fetchone()
+		if status:
+			session_length = (datetime.now() - timestamp).total_seconds()
+			print(bdAddr + " session lasted:" + str(session_length) + '.')
+
+			cur = db.cursor()
+
+			user = cur.execute("SELECT user FROM users WHERE bdAddr = ? ORDER BY ROWID DESC LIMIT 1", (bdAddr,)).fetchone()
 			
 			if user is not None:
 				user = user[0]
@@ -310,22 +293,22 @@ def background_thread():
 				'timestamp': str(timestamp),
 				'bdAddr': bdAddr,
 				'user': user,
-				'disturbance': disturbance,
+				'session_length': session_length,
 			}
 
-			db.execute("INSERT INTO disturbances VALUES (?, ?, ?, ?)", (new_entry['timestamp'], new_entry['bdAddr'], new_entry['user'], new_entry['disturbance']))
-			db.commit()
+			cur.execute("INSERT INTO sessions (timestamp, bdADdr, user, session_length) VALUES (?, ?, ?, ?)", (new_entry['timestamp'], new_entry['bdAddr'], new_entry['user'], new_entry['session_length']))
+			cur.commit()
 
-			new_entry['disturbance'] = secs_to_string(disturbance)
+			new_entry['key'] = cur.execute("SELECT key FROM sessions ORDER BY ROWID DESC LIMIT 1").fetchone()[0]
+			new_entry['session_length_rendered'] = secs_to_string(session_length)
 
-			socketio.emit('new disturbance', new_entry)
+			socketio.emit('new session', new_entry)
 			get_graph_history()
 
 		else:
-			print(bdAddr, "is now disturbed...")
+			print(bdAddr, "session starting...")
 
-		db.execute("INSERT INTO event_log VALUES (?, ?, ?)", (datetime.now(), bdAddr, not disturbed, ))
-		# print("2.3[handle_single_click] - inserted into event_log", bdAddr)
+		db.execute("INSERT INTO events (timestamp, bdAddr, status) VALUES (?, ?, ?)", (datetime.now(), bdAddr, not status, ))
 		db.commit()
 
 		update_state_tabe()
@@ -338,28 +321,28 @@ def background_thread():
 		If does not exist return False and datetime.now().
 		"""
 
-		row = db.execute("SELECT * FROM event_log WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", (bdAddr, )).fetchone()		
+		row = db.execute("SELECT (timestamp, status) FROM events WHERE bdAddr=? ORDER BY timestamp DESC LIMIT 1", (bdAddr, )).fetchone()		
 		# print("2.1[get_last]", row)
 
 		if row is not None:
-			return dateutil.parser.parse(row[0]), bool(row[2])
+			return dateutil.parser.parse(row[0]), bool(row[1])
 
 		return (datetime.now(), False)
 
 
-	def get_total_disturbance(bdAddr):
-		"""
-		Sum total disturbances for this bdAddr in disturbances.
-		Return rounded total.
-		"""
+	# def get_total_session_length(bdAddr):
+	# 	"""
+	# 	Sum total session_length for this bdAddr in sessions.
+	# 	Return rounded total.
+	# 	"""
 
-		user = db.execute("SELECT user FROM users WHERE bdAddr = ? ORDER BY ROWID DESC LIMIT 1", (bdAddr,)).fetchone()
+	# 	user = db.execute("SELECT user FROM users WHERE bdAddr = ? ORDER BY ROWID DESC LIMIT 1", (bdAddr,)).fetchone()
 
-		if user is not None:
-			user = user[0]
+	# 	if user is not None:
+	# 		user = user[0]
 
-		total = db.execute("SELECT SUM(disturbance) FROM disturbances WHERE uesr=?", (user,)).fetchone()
-		return round(total[0], 0)
+	# 	total = db.execute("SELECT SUM(session_length) FROM sessions WHERE uesr=?", (user,)).fetchone()
+	# 	return round(total[0], 0)
 
 
 	client.get_info(got_info)

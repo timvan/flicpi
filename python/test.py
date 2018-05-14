@@ -79,16 +79,34 @@ def get_users2():
 
 
 
-get_users()
-get_users2()
-get_users()
-get_users2()
-get_users()
+
+
+cur = db.cursor()
+print(cur.execute("SELECT key FROM sessions ORDER BY ROWID DESC LIMIT 1").fetchone()[0])
 
 
 
 
-devices = []
+
+
+
+
+
+
+
+
+
+
+# get_users()
+# get_users2()
+# get_users()
+# get_users2()
+# get_users()
+
+
+
+
+# devices = []
 
 class Device():
 	def __init__(self, bdAddr, user, colour):

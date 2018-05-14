@@ -117,6 +117,7 @@
                     <thead>
                         <tr>
                             <!-- <th>bdAddr</th> -->
+                            <th>key</th>
                             <th>Timestamp</th>
                             <th>bdAddr</th>
                             <th>User</th>
@@ -126,10 +127,11 @@
                     <tbody id="history_tablebody">
                         {% for row in history %}
                             <tr>
+                                <td>{{ row.key }}</td>
                                 <td>{{ row.timestamp }}</td>
                                 <td>{{ row.bdAddr }}</td>
                                 <td>{{ row.user }}</td>
-                                <td>{{ row.disturbance }}</td>
+                                <td>{{ row.session_length_rendered }}</td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -204,9 +206,9 @@
             str += ('<td>' + String(data[i]['state']) + '</td>')
 
     		if(String(data[i]['state']) == 'true'){
-    			str += ('<td class="current_disturbance active" disturbance_start="' + String(data[i]['disturbance_start']) + '"></td>');
+    			str += ('<td class="current_session active" session_start="' + String(data[i]['session_start']) + '"></td>');
     		}else{
-    			str += ('<td class="current_disturbance"></td>');
+    			str += ('<td class="current_session"></td>');
     		}
     	
     		str += ('<td class="">' + secs_to_string(data[i]['daily_total']) + '</td>')
@@ -220,11 +222,11 @@
     });
 
     var counter = setInterval(function() {
-    	var $rows = $(state_tablebody).find('td.current_disturbance')
+    	var $rows = $(state_tablebody).find('td.current_session')
 
     	$rows.each(function(index, value){
     		if($(this).hasClass('active')){
-	    		var t = new Date($(this).attr('disturbance_start'));
+	    		var t = new Date($(this).attr('session_start'));
 	    		var t_change = Math.floor((Date.now() - t) / 1000);
 	    		
 	    		if(t_change >= 60){
@@ -364,15 +366,16 @@
 
     // ----- DISRUPTION HISTORY -----
 
-    socket.on('new disturbance', function(data){
+    socket.on('new session', function(data){
 
         var str = '';
 
         str += '<tr>';
+        str += ('<td>' + date['key'] + '</td>')
         str += ('<td>' + data['timestamp'] + '</td>');
         str += ('<td>' + data['bdAddr'] + '</td>');
         str += ('<td>' + data['user'] + '</td>');
-        str += ('<td>' + data['disturbance'] + '</td>');
+        str += ('<td>' + data['session_length_rendered'] + '</td>');
         str += '</tr>';
 
         $('#history_tablebody').prepend(str);
