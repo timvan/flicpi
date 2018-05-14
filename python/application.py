@@ -71,7 +71,7 @@ def update_state_tabe():
 	
 	socketio.emit('update state table', table)
 
-@app.route('/delete_history', methods='POST')
+@app.route('/delete_history', methods=["POST"])
 def delete_history():
 	print('at delete history')
 	print(request.form)
