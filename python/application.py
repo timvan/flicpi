@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for
 from flask_socketio import SocketIO
 from datetime import date, datetime, timedelta
 import dateutil.parser
@@ -44,7 +44,7 @@ def index():
 			})
 
 	get_graph_history()
-	
+
 	return render_template('index.html', history = history)
 
 
@@ -75,7 +75,11 @@ def update_state_tabe():
 @app.route('/delete_history', methods=["POST"])
 def delete_history():
 	print('at delete history')
+	
 	print(request.form)
+	for value in request.form:
+		print(value[1])
+
 	return redirect(url_for('index'))
 
 
