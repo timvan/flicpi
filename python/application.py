@@ -163,7 +163,7 @@ def get_graph_history():
 		rows.append(row)
 		n += 1
 
-	print(rows)
+	# print(rows)
 	socketio.emit('graph', [rows, users])
 
 
@@ -278,7 +278,7 @@ def background_thread():
 		
 		if status:
 			session_length = (datetime.now() - timestamp).total_seconds()
-			print(bdAddr + " session lasted:" + str(session_length) + '.')
+			print(bdAddr + " session lasted: " + str(session_length) + '.')
 
 			
 
@@ -298,7 +298,7 @@ def background_thread():
 			cur.execute("INSERT INTO sessions (timestamp, bdADdr, user, session_length) VALUES (?, ?, ?, ?)", (new_entry['timestamp'], new_entry['bdAddr'], new_entry['user'], new_entry['session_length']))
 			new_entry['key'] = cur.execute("SELECT key FROM sessions ORDER BY ROWID DESC LIMIT 1").fetchone()[0]
 			db.commit()
-			
+
 			new_entry['session_length_rendered'] = secs_to_string(session_length)
 
 			socketio.emit('new session', new_entry)
