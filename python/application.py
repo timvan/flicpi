@@ -76,10 +76,11 @@ def update_state_tabe():
 def delete_history():
 	print('at delete history')
 	
-	print(request.form)
-	for value in request.form:
-		print(request.form[value])
+	print(request.args)
+	for key, value in request.args:
+		# print(request.form[value])
 		print('v:', value)
+		print('k:', key)
 
 
 	return redirect(url_for('index'))
