@@ -213,18 +213,18 @@
     		str += ('<tr bdAddr="' + data[i]['bdAddr'] + '">')
     		// str += ('<td>' + String(data[i]['bdAddr']) + '</td>')
             str += ('<td>' + String(data[i]['user']) + '</td>')
-            str += ('<td>' + String(data[i]['color']) + '</td>')
+            str += ('<td>' + capitalise_first_letter(String(data[i]['color'])) + '</td>')
             
 
     		if(String(data[i]['state']) == 'true'){
                 str += ('<td>' + '<i class="material-icons">new_releases</i>' + '</td>')
-    			str += ('<td class="current_session active right" session_start="' + String(data[i]['session_start']) + '"></td>');
+    			str += ('<td class="current_session active" session_start="' + String(data[i]['session_start']) + '"></td>');
     		}else{
                 str += ('<td>' + 'Free' + '</td>')
     			str += ('<td class="current_session"></td>');
     		}
     	
-    		str += ('<td class="right">' + secs_to_string(data[i]['daily_total']) + '</td>')
+    		str += ('<td class="">' + secs_to_string(data[i]['daily_total']) + '</td>')
     		str += ('</tr>')
 
     	};
@@ -497,7 +497,12 @@
         var rendered_time = lst.join(" ");
 
         return rendered_time;
-    } 
+    };
+
+    function capitalise_first_letter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    };
+
 
 </script>
 
