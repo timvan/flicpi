@@ -115,12 +115,12 @@
                 <div class="card-title">Disruption History</div>
                 <form id="history_table_delete_rows_form" action="{{ url_for('delete_history')}}" method="post">
                     <!-- <a class="btn right" type="submit"><i class="material-icons">delete</i></a> -->
-                    <input type="submit" value="delete" class="btn right">
+                    <input type="submit" value="delete" class="btn left">
                     <table id="history_table">
                         <thead>
                             <tr>
                                 <!-- <th>bdAddr</th> -->
-                                <th></th>
+                                <th><i class="material-icons">delete</i></th>
                                 <th>Key</th>
                                 <th>Timestamp</th>
                                 <th>bdAddr</th>
@@ -214,15 +214,17 @@
     		// str += ('<td>' + String(data[i]['bdAddr']) + '</td>')
             str += ('<td>' + String(data[i]['user']) + '</td>')
             str += ('<td>' + String(data[i]['color']) + '</td>')
-            str += ('<td>' + String(data[i]['state']) + '</td>')
+            
 
     		if(String(data[i]['state']) == 'true'){
-    			str += ('<td class="current_session active" session_start="' + String(data[i]['session_start']) + '"></td>');
+                str += ('<td>' + '<i class="material-icons">new_releases</i>' + '</td>')
+    			str += ('<td class="current_session active right" session_start="' + String(data[i]['session_start']) + '"></td>');
     		}else{
+                str += ('<td>' + 'Free' + '</td>')
     			str += ('<td class="current_session"></td>');
     		}
     	
-    		str += ('<td class="">' + secs_to_string(data[i]['daily_total']) + '</td>')
+    		str += ('<td class="right">' + secs_to_string(data[i]['daily_total']) + '</td>')
     		str += ('</tr>')
 
     	};
