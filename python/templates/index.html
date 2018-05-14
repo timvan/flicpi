@@ -115,17 +115,16 @@
                 <div class="card-title">Disruption History</div>
                 <form id="history_table_delete_rows_form" action="{{ url_for('delete_history')}}" method="post">
                     <!-- <a class="btn right" type="submit"><i class="material-icons">delete</i></a> -->
-                    <input type="submit" value="delete" class="btn left">
+                    <!-- <input type="submit" value="delete" class="btn left"> -->
                     <table id="history_table">
                         <thead>
                             <tr>
-                                <!-- <th>bdAddr</th> -->
-                                <th><i class="material-icons">delete</i></th>
+                                <!-- <th><i class="material-icons">delete</i></th> -->
+                                <th><button class="btn waves-effect waves-light" type="submit" name="action"><i class="material-icons">delete</i></button></th>
                                 <th>Key</th>
                                 <th>Timestamp</th>
                                 <th>bdAddr</th>
                                 <th>User</th>
-                                <!-- <th>Colour</th> -->
                                 <th>Disruption</th>
                         </thead>
                         <tbody id="history_tablebody">
