@@ -190,7 +190,7 @@
     });
 
     $(document).ready(function(){
-        socket.emit('page loaded');
+        socket.emit('get graph');
     })
 
     socket.on('disconnect', function() {
@@ -433,14 +433,13 @@
 
         var options = {
             hAxis : {
-                title: "Minutes per Day"
+                title: "Minutes"
             },
             colors : colors,
         };
 
         var bar_graph = new google.charts.Bar(document.getElementById('graph'));
         bar_graph.draw(data, options);
-        console.log(data, options, bar_graph);
     };
 
     socket.on('graph', function(msg){

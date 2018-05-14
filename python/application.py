@@ -53,7 +53,7 @@ def get_session_history():
 	return history
 
 
-@socketio.on('page loaded')
+@socketio.on('get graph')
 def get_graph_history():
 	days_to_graph = 10
 	devs = db_flicdeamon.execute("SELECT bdaddr, color FROM buttons").fetchall()
